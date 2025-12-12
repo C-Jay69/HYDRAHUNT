@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Edit2, Download, Copy, Trash2, Folder, FolderPlus, Grid, Search } from 'lucide-react';
 import Button from '../components/ui/Button';
-import { getResumes, deleteResume, duplicateResume, getFolders, createResume, saveResume } from '../services/storage';
+import { getResumes, deleteResume, duplicateResume, getFolders, createResume } from '../services/storage';
 import { ResumeData } from '../types';
 
 const Dashboard: React.FC = () => {
@@ -14,33 +14,40 @@ const Dashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreatingFolder, setIsCreatingFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const loadData = () => {
-    setResumes(getResumes());
-    setFolders(['All', ...getFolders()]);
+  const loadData = async () => {
+    setIsLoading(true);
+    const [fetchedResumes, fetchedFolders] = await Promise.all([
+        getResumes(),
+        getFolders()
+    ]);
+    setResumes(fetchedResumes);
+    setFolders(['All', ...fetchedFolders]);
+    setIsLoading(false);
   };
 
-  const handleCreateResume = () => {
+  const handleCreateResume = async () => {
     const folderToUse = selectedFolder === 'All' ? 'General' : selectedFolder;
-    const newResume = createResume(folderToUse);
+    const newResume = await createResume(folderToUse);
     navigate(`/editor/${newResume.id}`);
   };
 
-  const handleDelete = (id: string, e: React.MouseEvent) => {
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm('Are you sure you want to delete this resume?')) {
-      deleteResume(id);
+      await deleteResume(id);
       loadData();
     }
   };
 
-  const handleDuplicate = (id: string, e: React.MouseEvent) => {
+  const handleDuplicate = async (id: string, e: React.MouseEvent) => {
     e.preventDefault();
-    duplicateResume(id);
+    await duplicateResume(id);
     loadData();
   };
 
@@ -119,7 +126,7 @@ const Dashboard: React.FC = () => {
                {selectedFolder === 'All' ? 'ALL FILES' : selectedFolder.toUpperCase()}
              </h1>
              <p className="text-gray-500 font-mono text-sm">
-               {filteredResumes.length} RECORDS FOUND // SYSTEM READY
+               {isLoading ? 'SCANNING SECTOR...' : `${filteredResumes.length} RECORDS FOUND // SYSTEM READY`}
              </p>
           </div>
           
@@ -134,7 +141,12 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {filteredResumes.length === 0 ? (
+        {isLoading ? (
+            <div className="text-center py-20">
+                <div className="animate-spin w-10 h-10 border-4 border-[#00FFFF] border-t-transparent rounded-full mx-auto mb-4"></div>
+                <p className="text-gray-500 animate-pulse">ESTABLISHING CONNECTION...</p>
+            </div>
+        ) : filteredResumes.length === 0 ? (
           <div className="text-center py-20 bg-[#111] border border-dashed border-[#333]">
              <div className="w-20 h-20 bg-[#222] rounded-full flex items-center justify-center mx-auto mb-4 text-gray-500">
                 <Folder size={32} />

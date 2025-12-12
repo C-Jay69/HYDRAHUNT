@@ -15,7 +15,9 @@
     "lucide-react": "^0.560.0",
     "@google/genai": "^1.33.0",
     "docx": "8.5.0",
-    "file-saver": "2.0.5"
+    "file-saver": "2.0.5",
+    "@supabase/supabase-js": "2.39.0",
+    "@stripe/stripe-js": "2.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

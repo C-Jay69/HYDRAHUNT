@@ -1,13 +1,14 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
+import { supabase } from '../services/supabase';
 
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  login: (email: string) => Promise<void>;
+  login: (email: string) => Promise<void>; // Magic Link
   loginWithGoogle: () => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,47 +18,73 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
-    const storedUser = localStorage.getItem('viberesume_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // Check active sessions and sets the user
+    const session = supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        mapSupabaseUser(session.user);
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        mapSupabaseUser(session.user);
+      } else {
+        setUser(null);
+        setIsLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
+
+  const mapSupabaseUser = (sbUser: any) => {
+    const newUser: User = {
+      id: sbUser.id,
+      name: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Hunter',
+      email: sbUser.email || '',
+      avatar: sbUser.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${sbUser.email}`
+    };
+    setUser(newUser);
+    setIsLoading(false);
+  };
 
   const login = async (email: string) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const newUser: User = {
-      id: 'u1',
-      name: email.split('@')[0],
-      email: email,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
-    };
-    setUser(newUser);
-    localStorage.setItem('viberesume_user', JSON.stringify(newUser));
-    setIsLoading(false);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    });
+    if (error) {
+      alert(error.message);
+      setIsLoading(false);
+    } else {
+      alert('Magic link sent to your email!');
+      setIsLoading(false);
+    }
   };
 
   const loginWithGoogle = async () => {
     setIsLoading(true);
-    // Simulate OAuth popup flow
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    const googleUser: User = {
-      id: 'g1',
-      name: 'Google User',
-      email: 'user@gmail.com',
-      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=google'
-    };
-    setUser(googleUser);
-    localStorage.setItem('viberesume_user', JSON.stringify(googleUser));
-    setIsLoading(false);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+         redirectTo: window.location.origin
+      }
+    });
+    if (error) {
+        console.error(error);
+        alert("Google Login Failed: " + error.message);
+        setIsLoading(false);
+    }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem('viberesume_user');
   };
 
   return (

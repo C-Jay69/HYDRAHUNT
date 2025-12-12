@@ -1,9 +1,11 @@
+
 import { GoogleGenAI, Chat } from "@google/genai";
 import { ResumeData } from '../types';
 
 const getAiClient = () => {
   try {
-    const apiKey = process.env.API_KEY;
+    // Priority: Env Var -> Hardcoded fallback (User provided key)
+    const apiKey = process.env.API_KEY || 'AIzaSyChwGMOZvW1cLKslxqYJkSo0z7aQxeX67c';
     if (!apiKey) return null;
     return new GoogleGenAI({ apiKey });
   } catch (e) {

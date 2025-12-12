@@ -13,6 +13,7 @@ import Templates from './pages/Templates';
 import Pricing from './pages/Pricing';
 import Login from './pages/Login';
 import { AuthProvider } from './contexts/AuthContext';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 // --- Sub-components for Landing Page ---
 
@@ -66,6 +67,8 @@ const PricingCard = ({ title, price, desc, features, cta, highlight = false, col
 // --- Main Landing Component ---
 
 const Landing = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="bg-black text-white font-sans selection:bg-[#FF00FF] selection:text-white">
       {/* Hero Section */}
@@ -82,31 +85,36 @@ const Landing = () => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-[#00FFFF] to-[#FF00FF] rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
                 <img 
                   src="/hydra-logo.png" 
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop"; // Cyberpunk Abstract Fallback
+                  }}
                   alt="Hydra Hunt" 
                   className="relative w-64 md:w-80 rounded-lg shadow-2xl border border-[#333] object-cover transition-transform group-hover:scale-[1.02]" 
                 />
              </div>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-black mb-8 leading-none tracking-tighter">
+          <h1 className="text-6xl md:text-8xl font-black mb-8 leading-none tracking-tighter uppercase">
             HYDRA<span className="text-[#FF00FF]">HUNT</span> <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FFFF] to-[#FF00FF]">
-              JOB HUNTING IS DEAD.
+              {t('hero.title1')}
             </span>
           </h1>
-          <h2 className="text-4xl md:text-5xl font-black mb-8 text-white">WE KILLED IT.</h2>
+          <h2 className="text-4xl md:text-5xl font-black mb-8 text-white">{t('hero.title2')}</h2>
           
           <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed">
-            Your multi-headed AI hunts jobs, builds your resume, optimizes your profile, and strikes targets while you get on with your life. No more endless scrolling. No more copy-pasting applications. Just pure, <span className="text-[#FF00FF] font-bold">automated career warfare</span>.
+            {t('hero.desc')}
           </p>
           
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
             <Link to="/dashboard" className="group relative px-8 py-5 bg-[#00FFFF] text-black font-black text-xl hover:bg-[#00FFFF]/90 transition-all clip-path-polygon w-full md:w-auto">
-              <span className="relative z-10 flex items-center justify-center gap-2">UNLEASH HUNT MODE <ArrowRight className="group-hover:translate-x-1 transition-transform"/></span>
+              <span className="relative z-10 flex items-center justify-center gap-2">{t('hero.cta_main')} <ArrowRight className="group-hover:translate-x-1 transition-transform"/></span>
               <div className="absolute inset-0 border-2 border-white translate-x-1 translate-y-1 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform bg-transparent pointer-events-none"></div>
             </Link>
              <Link to="/pricing" className="px-8 py-5 border-2 border-[#BEF754] text-[#BEF754] font-bold text-xl hover:bg-[#BEF754]/10 transition-all w-full md:w-auto">
-              WATCH HYDRA HUNT
+              {t('hero.cta_sec')}
             </Link>
           </div>
         </div>
@@ -443,25 +451,27 @@ const Landing = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <Router>
-        <div className="min-h-screen flex flex-col font-sans">
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/editor/:id" element={<Editor />} />
-              <Route path="/templates" element={<Templates />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          <footer className="bg-black text-white py-8 text-center border-t-4 border-[#00FFFF]">
-             <p className="font-bold font-mono">VIBE CODING © 2024</p>
-          </footer>
-        </div>
-      </Router>
+      <LanguageProvider>
+        <Router>
+          <div className="min-h-screen flex flex-col font-sans">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/editor/:id" element={<Editor />} />
+                <Route path="/templates" element={<Templates />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </main>
+            <footer className="bg-black text-white py-8 text-center border-t-4 border-[#00FFFF]">
+               <p className="font-bold font-mono">VIBE CODING © 2024</p>
+            </footer>
+          </div>
+        </Router>
+      </LanguageProvider>
     </AuthProvider>
   );
 };

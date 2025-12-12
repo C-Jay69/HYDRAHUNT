@@ -1,28 +1,41 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Zap, Mail, ArrowRight, Github, Chrome } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { useAuth } from '../contexts/AuthContext';
+import { createCheckoutSession } from '../services/stripe';
 
 const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const plan = searchParams.get('plan');
+
+  useEffect(() => {
+    // If user is already logged in or just logged in, handle redirect
+    if (user) {
+        if (plan) {
+            // If they came from pricing, send them to checkout
+            const priceId = plan === 'hunter' ? 'price_hunter_id' : 'price_hydra_id';
+            createCheckoutSession(priceId, user.email);
+        } else {
+            navigate('/dashboard');
+        }
+    }
+  }, [user, plan, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return;
-    await login(email);
-    navigate('/dashboard');
+    if (!email) return;
+    await login(email); // This sends a magic link in the new Supabase flow
   };
 
   const handleGoogle = async () => {
     await loginWithGoogle();
-    navigate('/dashboard');
   };
 
   return (
@@ -39,7 +52,9 @@ const Login: React.FC = () => {
                <Zap className="text-[#BEF754]" size={32} />
             </div>
             <h2 className="text-3xl font-black text-white">{isLogin ? 'ACCESS MAINFRAME' : 'INITIATE SEQUENCE'}</h2>
-            <p className="text-gray-500 font-mono text-sm mt-2">Identify yourself to proceed.</p>
+            <p className="text-gray-500 font-mono text-sm mt-2">
+                {plan ? `Authentication required to activate ${plan.toUpperCase()} mode.` : 'Identify yourself to proceed.'}
+            </p>
          </div>
 
          <form onSubmit={handleSubmit} className="space-y-4">
@@ -50,16 +65,10 @@ const Login: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="user@hydrahunt.com"
             />
-            <Input 
-              label="PASSWORD" 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
+            {/* Supabase Magic Link doesn't need password input initially */}
             
             <Button variant="primary" fullWidth className="py-3 text-lg mt-4 bg-[#0000FF] border-[#00FFFF] hover:bg-white hover:text-black hover:shadow-[0_0_20px_#fff]">
-               {isLogin ? 'ENTER SYSTEM' : 'CREATE ID'} <ArrowRight className="inline ml-2" size={18} />
+               {isLogin ? 'SEND MAGIC LINK' : 'CREATE ID'} <ArrowRight className="inline ml-2" size={18} />
             </Button>
          </form>
 
@@ -73,13 +82,6 @@ const Login: React.FC = () => {
             <Button variant="ghost" fullWidth className="border border-[#333] text-gray-300 hover:border-white hover:bg-white hover:text-black flex items-center justify-center gap-2" onClick={handleGoogle}>
                <Chrome size={18} /> Google Account
             </Button>
-         </div>
-
-         <div className="mt-8 text-center text-sm text-gray-400">
-            {isLogin ? "Don't have an ID? " : "Already verified? "}
-            <button onClick={() => setIsLogin(!isLogin)} className="font-bold text-[#00FFFF] hover:underline hover:text-white transition-colors">
-               {isLogin ? 'Initialize Sign Up' : 'Access Login'}
-            </button>
          </div>
       </div>
     </div>
