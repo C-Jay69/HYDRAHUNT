@@ -14,36 +14,43 @@ const getAiClient = () => {
   }
 };
 
-export const analyzeResume = async (resume: ResumeData): Promise<string> => {
+export interface GeneralAnalysis {
+  score: number;
+  summary: string;
+  strengths: string[];
+  weaknesses: string[];
+}
+
+export const analyzeResume = async (resume: ResumeData): Promise<GeneralAnalysis | null> => {
   try {
     const ai = getAiClient();
-    if (!ai) return "API Key not found. Cannot analyze resume.";
+    if (!ai) return null;
 
     const prompt = `
-      You are a strict but helpful career coach with a "Cyber-Punk" persona. 
-      Review the following resume data and provide a short, punchy critique (max 100 words).
-      Give it a score out of 100.
-      Highlight 1 key strength and 1 key improvement.
+      Perform a general audit of this resume data.
+      Resume: ${JSON.stringify(resume)}
       
-      Resume Data:
-      ${JSON.stringify(resume, null, 2)}
-      
-      Format your response like this:
-      SCORE: [Score]/100
-      VIBE CHECK: [Critique]
-      POWER MOVE: [Strength]
-      GLITCH FIX: [Improvement]
+      Return JSON:
+      {
+        "score": number (0-100),
+        "summary": "string (2 sentences)",
+        "strengths": ["string", "string"],
+        "weaknesses": ["string", "string"]
+      }
     `;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
+      config: { responseMimeType: 'application/json' }
     });
 
-    return response.text || "Could not generate analysis.";
+    let jsonString = response.text || "{}";
+    jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(jsonString);
   } catch (error) {
     console.error("Gemini analysis failed:", error);
-    return "Error connecting to the mainframe. AI analysis unavailable.";
+    return null;
   }
 };
 
@@ -59,27 +66,25 @@ export const analyzeResumeForJob = async (resume: ResumeData, targetJob: string)
     if (!ai) return null;
 
     const prompt = `
-      Act as a senior hiring manager for the role of: "${targetJob}".
-      Analyze this resume.
+      Act as a hiring manager for: "${targetJob}". Analyze this resume.
+      Resume: ${JSON.stringify(resume)}
       
-      Resume Data:
-      ${JSON.stringify(resume, null, 2)}
-      
-      Return a JSON object with:
-      - score: number (0-100)
-      - critique: string (short summary of fit)
-      - improvements: string[] (3-5 specific bullet points on what to change to fit the "${targetJob}" role better)
-      
-      Return ONLY valid JSON.
+      Return JSON:
+      {
+        "score": number (0-100),
+        "critique": "string (summary)",
+        "improvements": ["string", "string", "string"]
+      }
     `;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
+      config: { responseMimeType: 'application/json' }
     });
 
-    const jsonString = response.text?.replace(/```json/g, '').replace(/```/g, '').trim();
-    if (!jsonString) return null;
+    let jsonString = response.text || "{}";
+    jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonString);
   } catch (error) {
     console.error("Detailed analysis failed:", error);
@@ -93,25 +98,21 @@ export const suggestBestRoles = async (resume: ResumeData): Promise<string[]> =>
     if (!ai) return ["Error connecting to AI"];
 
     const prompt = `
-      You are an expert career strategist.
-      Analyze the skills, experience, and summary of the following resume.
-      Suggest the top 3 specific job titles this candidate is BEST suited for right now.
-      For each title, add a very brief (5-10 words) explanation of why.
+      Suggest top 3 job titles for this resume.
+      Resume: ${JSON.stringify(resume)}
       
-      Resume Data:
-      ${JSON.stringify(resume, null, 2)}
-      
-      Return ONLY a JSON array of strings.
-      Example: ["Senior Frontend Dev (Strong React skills)", "UI Engineer (Design background)", "Tech Lead (Leadership exp)"]
+      Return JSON Array of strings only.
+      Example: ["Role A (Reason)", "Role B (Reason)"]
     `;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
+      config: { responseMimeType: 'application/json' }
     });
 
-    const jsonString = response.text?.replace(/```json/g, '').replace(/```/g, '').trim();
-    if (!jsonString) return ["Could not generate suggestions"];
+    let jsonString = response.text || "[]";
+    jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonString);
   } catch (error) {
     console.error("Role suggestion failed:", error);
@@ -126,8 +127,8 @@ export interface TransitionAnalysis {
   missingSkills: string[];
   resources: {
     name: string;
-    provider: string; // e.g. Coursera, Udemy, University
-    type: string; // Course, Cert, Degree
+    provider: string;
+    type: string;
     description: string;
   }[];
 }
@@ -138,41 +139,27 @@ export const analyzeCareerTransition = async (resume: ResumeData, targetCareer: 
     if (!ai) return null;
 
     const prompt = `
-      You are an expert Career Transition Coach.
-      The user wants to transition from their current profile (based on resume) to a new career in: "${targetCareer}".
+      Career transition advice from resume role to "${targetCareer}".
+      Resume: ${JSON.stringify(resume)}
       
-      Analyze their Resume:
-      ${JSON.stringify(resume, null, 2)}
-      
-      Provide a JSON object with the following structure:
+      Return JSON:
       {
-        "currentRole": "string (inferred from resume)",
+        "currentRole": "string",
         "targetRole": "${targetCareer}",
-        "transferableSkills": ["string", "string"], // Skills they ALREADY have that are useful for the new role
-        "missingSkills": ["string", "string"], // Critical skills they are missing
-        "resources": [
-           {
-             "name": "string (Specific course/cert name)",
-             "provider": "string (e.g. Coursera, edX, University, FreeCodeCamp)",
-             "type": "string (e.g. Online Course, Certification, Degree)",
-             "description": "string (Short reason why this helps)"
-           }
-        ]
+        "transferableSkills": ["string"],
+        "missingSkills": ["string"],
+        "resources": [{ "name": "string", "provider": "string", "type": "string", "description": "string" }]
       }
-      
-      Directives:
-      1. Be specific with "resources". Suggest real, popular courses or certifications (e.g., Google Cybersecurity Cert, AWS Solutions Architect).
-      2. Identify at least 3 transferable skills and 3 missing skills.
-      3. Return ONLY valid JSON.
     `;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
+      config: { responseMimeType: 'application/json' }
     });
 
-    const jsonString = response.text?.replace(/```json/g, '').replace(/```/g, '').trim();
-    if (!jsonString) return null;
+    let jsonString = response.text || "{}";
+    jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonString);
 
   } catch (error) {
@@ -201,35 +188,27 @@ export const findJobsWithSearch = async (resume: ResumeData, location: string, p
       Resume Summary: ${resume.summary}
       Skills: ${resume.skills.map(s => s.name).join(', ')}
       
-      Use Google Search to find real listings.
-      Return a JSON array of objects.
-      Structure:
+      Return a JSON array of objects:
       [
         {
           "title": "Job Title",
           "company": "Company Name",
           "location": "Location",
-          "matchScore": 85, (0-100 based on resume fit)
+          "matchScore": 85,
           "url": "URL to job posting"
         }
       ]
-      
-      Important:
-      - If you cannot find a direct apply URL, provide the search result URL.
-      - Ensure the output is valid JSON.
     `;
 
+    // Note: responseMimeType is NOT supported with googleSearch tools
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
       config: {
         tools: [{googleSearch: {}}],
-        // Note: responseSchema not supported with googleSearch in all regions/models, 
-        // relying on prompt instruction for JSON structure.
       }
     });
 
-    // Extract JSON from response text (which might contain grounding text)
     const text = response.text || "";
     const jsonMatch = text.match(/\[[\s\S]*\]/);
     
@@ -237,8 +216,6 @@ export const findJobsWithSearch = async (resume: ResumeData, location: string, p
       return JSON.parse(jsonMatch[0]);
     }
     
-    // Fallback: If JSON parsing fails, try to construct from grounding chunks or return mock data
-    // For this implementation, we will try to parse loosely or return empty
     return [];
 
   } catch (error) {
@@ -256,14 +233,8 @@ export const createChatSession = (resume: ResumeData, additionalContext: string 
       model: 'gemini-2.5-flash',
       config: {
         systemInstruction: `You are a helpful, cyber-punk themed career coach assistant named "VibeBot". 
-        You have access to the user's resume data provided below.
-        Always answer questions specifically based on their resume context.
-        Keep answers punchy, helpful, and encouraging.
-        
-        RESUME CONTEXT:
-        ${JSON.stringify(resume)}
-        
-        ${additionalContext ? `CURRENT ANALYSIS/CONTEXT:\n${additionalContext}` : ''}
+        RESUME CONTEXT: ${JSON.stringify(resume)}
+        ${additionalContext}
         `,
       }
     });
@@ -279,32 +250,21 @@ export const optimizeResumeForJob = async (resume: ResumeData, targetJob: string
     if (!ai) return null;
 
     const prompt = `
-      You are an expert resume writer. 
-      Rewrite the provided resume data to perfectly target the role of "${targetJob}".
+      Rewrite this resume to target: "${targetJob}".
+      Apply suggestions: ${suggestions.join('; ')}
+      Resume: ${JSON.stringify(resume)}
       
-      Apply these suggestions:
-      ${suggestions.join('\n')}
-      
-      Resume Data to Rewrite:
-      ${JSON.stringify(resume, null, 2)}
-      
-      Directives:
-      1. Rewrite the "summary" to be impactful and relevant to ${targetJob}.
-      2. Rewrite "experience" descriptions to highlight relevant achievements. Use strong action verbs.
-      3. Re-order or add/remove "skills" to match the job.
-      4. Keep personal info (name, email, etc.) unchanged.
-      5. Return the FULL JSON object matching the ResumeData structure exactly.
-      
-      Return ONLY valid JSON.
+      Return FULL JSON matching ResumeData structure exactly.
     `;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
+      config: { responseMimeType: 'application/json' }
     });
 
-    const jsonString = response.text?.replace(/```json/g, '').replace(/```/g, '').trim();
-    if (!jsonString) return null;
+    let jsonString = response.text || "{}";
+    jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(jsonString);
   } catch (error) {
     console.error("Optimization failed:", error);
@@ -313,69 +273,111 @@ export const optimizeResumeForJob = async (resume: ResumeData, targetJob: string
 };
 
 export const parseResumeFromText = async (text: string): Promise<Partial<ResumeData> | null> => {
-  try {
-    const ai = getAiClient();
-    if (!ai) throw new Error("API Key missing");
-
-    const prompt = `
-      You are an expert data extraction AI.
-      Extract resume information from the text provided below and return it as a JSON object.
-      The JSON must match the following structure exactly.
-      
-      Required JSON Structure:
-      {
-        "fullName": "string",
-        "title": "string",
-        "email": "string",
-        "phone": "string",
-        "location": "string",
-        "website": "string",
-        "summary": "string",
-        "experience": [
-          {
-            "company": "string",
-            "role": "string",
-            "startDate": "string",
-            "endDate": "string",
-            "description": "string"
-          }
-        ],
-        "education": [
-          {
-            "school": "string",
-            "degree": "string",
-            "year": "string"
-          }
-        ],
-        "skills": [
-          {
-            "name": "string",
-            "level": 3 
-          }
-        ]
-      }
-
-      Directives:
-      1. Return ONLY valid JSON. Do not include markdown formatting (like \`\`\`json).
-      2. If a field is not found in the text, leave it as an empty string or empty array.
-      3. Summarize long descriptions to be punchy and effective.
-      4. Infer skill levels (1-5) if possible, otherwise default to 3.
-      
-      Resume Text to Parse:
-      ${text.substring(0, 30000)}
-    `;
-
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-    });
-
-    const jsonString = response.text?.replace(/```json/g, '').replace(/```/g, '').trim();
-    if (!jsonString) return null;
-
-    return JSON.parse(jsonString);
-  } catch (error) {
-    console.error("Gemini parsing failed:", error);
+  const ai = getAiClient();
+  if (!ai) {
+    console.error("API Key missing");
     return null;
   }
+
+  // 1. Sanitize text: remove non-printable control characters that break XHR/JSON
+  const cleanText = text.replace(/[\x00-\x09\x0B-\x0C\x0E-\x1F\x7F-\x9F]/g, " ");
+  
+  // 2. Strict Limit: Reduce context size to ~15k chars to prevent timeouts/payload errors
+  const truncatedText = cleanText.substring(0, 15000); 
+
+  const prompt = `
+    Extract resume data from the text below into this JSON structure:
+    {
+      "fullName": "string", "title": "string", "email": "string", "phone": "string", 
+      "location": "string", "website": "string", "summary": "string",
+      "experience": [{ "company": "string", "role": "string", "startDate": "string", "endDate": "string", "description": "string" }],
+      "education": [{ "school": "string", "degree": "string", "year": "string" }],
+      "skills": [{ "name": "string", "level": 3 }]
+    }
+    Rules: Summarize descriptions. Infer skill levels (1-5). Return ONLY JSON.
+    
+    Text:
+    ${truncatedText}
+  `;
+
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+            responseMimeType: 'application/json', // Enforce JSON
+        }
+      });
+
+      let jsonString = response.text || "{}";
+      // Cleanup just in case
+      jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
+      
+      const parsed = JSON.parse(jsonString);
+      if (!parsed || Object.keys(parsed).length === 0) throw new Error("Empty JSON");
+      return parsed;
+
+    } catch (error) {
+      console.error(`Attempt ${attempt} - Gemini parsing failed:`, error);
+      if (attempt === 3) return null;
+      // Exponential backoff: 2s, 4s, 8s
+      await new Promise(resolve => setTimeout(resolve, 2000 * Math.pow(2, attempt - 1))); 
+    }
+  }
+  return null;
+};
+
+// ATS Analysis Interface
+export interface ATSAnalysis {
+  score: number;
+  missingKeywords: string[];
+  formattingIssues: string[];
+  sectionHeadersCheck: boolean;
+  contactInfoCheck: boolean;
+  summary: string;
+}
+
+// ATS Check Function
+export const analyzeATS = async (resume: ResumeData, jobDescription: string): Promise<ATSAnalysis | null> => {
+    try {
+        const ai = getAiClient();
+        if (!ai) return null;
+
+        const prompt = `
+            Act as a strict Applicant Tracking System (ATS) algorithm. 
+            Analyze this resume content for the target role/description: "${jobDescription || resume.title}".
+            
+            Resume Data: ${JSON.stringify(resume)}
+            
+            Evaluate based on:
+            1. Keyword matching (Hard skills relevant to the role).
+            2. Standard section headers (Experience, Education, Skills).
+            3. Contact info presence.
+            4. Cliché or fluff removal.
+            
+            Return JSON:
+            {
+                "score": number (0-100),
+                "missingKeywords": ["keyword1", "keyword2", "keyword3"],
+                "formattingIssues": ["issue1", "issue2"],
+                "sectionHeadersCheck": boolean,
+                "contactInfoCheck": boolean,
+                "summary": "Brief technical feedback string"
+            }
+        `;
+
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: prompt,
+            config: { responseMimeType: 'application/json' }
+        });
+
+        let jsonString = response.text || "{}";
+        jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
+        return JSON.parse(jsonString);
+    } catch (e) {
+        console.error("ATS Analysis failed", e);
+        return null;
+    }
 };

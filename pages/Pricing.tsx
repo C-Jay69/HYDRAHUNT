@@ -18,7 +18,14 @@ const Pricing: React.FC = () => {
       return;
     }
 
-    // 2. Initiate Stripe Checkout
+    // 2. Admin Bypass
+    if (user.id === 'ADMIN_OVERRIDE') {
+        alert(`COMMAND OVERRIDE ACCEPTED.\n\n${plan.toUpperCase()} MODE ACTIVATED.`);
+        navigate('/dashboard');
+        return;
+    }
+
+    // 3. Initiate Stripe Checkout
     const priceId = plan === 'hunter' ? 'price_hunter_id' : 'price_hydra_id';
     await createCheckoutSession(priceId, user.email);
   };

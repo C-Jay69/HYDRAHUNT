@@ -12,6 +12,7 @@ import Editor from './pages/Editor';
 import Templates from './pages/Templates';
 import Pricing from './pages/Pricing';
 import Login from './pages/Login';
+import Converter from './pages/Converter';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
@@ -463,6 +464,7 @@ const App: React.FC = () => {
                 <Route path="/editor/:id" element={<Editor />} />
                 <Route path="/templates" element={<Templates />} />
                 <Route path="/pricing" element={<Pricing />} />
+                <Route path="/converter" element={<Converter />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>

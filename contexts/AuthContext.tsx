@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
 import { supabase } from '../services/supabase';
+import { syncGuestResumes } from '../services/storage';
 
 interface AuthContextType {
   user: User | null;
@@ -13,23 +14,40 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const ADMIN_EMAIL = 'admin@hydrahunt.com';
+const ADMIN_KEY = 'hydra_admin_session';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check active sessions and sets the user
-    const session = supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        mapSupabaseUser(session.user);
-      } else {
+    // 1. Check for Admin Bypass first
+    const adminSession = localStorage.getItem(ADMIN_KEY);
+    if (adminSession) {
+        setAdminUser();
         setIsLoading(false);
-      }
-    });
+        return;
+    }
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    // 2. Check active Supabase sessions
+    const checkSupabaseSession = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+            await mapSupabaseUser(session.user);
+        } else {
+            setIsLoading(false);
+        }
+    };
+    checkSupabaseSession();
+
+    // 3. Listen for Supabase auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      // If we are in admin mode, ignore Supabase "signed out" events if they happen
+      if (localStorage.getItem(ADMIN_KEY)) return;
+
       if (session?.user) {
-        mapSupabaseUser(session.user);
+        await mapSupabaseUser(session.user);
       } else {
         setUser(null);
         setIsLoading(false);
@@ -39,7 +57,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const mapSupabaseUser = (sbUser: any) => {
+  const setAdminUser = () => {
+      setUser({
+          id: 'ADMIN_OVERRIDE',
+          name: 'COMMANDER (ADMIN)',
+          email: ADMIN_EMAIL,
+          avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256'
+      });
+  };
+
+  const mapSupabaseUser = async (sbUser: any) => {
+    setIsLoading(true);
+    
+    // Attempt to sync local storage data to the new account
+    try {
+        await syncGuestResumes(sbUser.id);
+    } catch (e) {
+        console.warn("Background sync error:", e);
+    }
+
     const newUser: User = {
       id: sbUser.id,
       name: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Hunter',
@@ -52,6 +88,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string) => {
     setIsLoading(true);
+
+    // --- ADMIN OVERRIDE ---
+    if (email.toLowerCase() === ADMIN_EMAIL) {
+        localStorage.setItem(ADMIN_KEY, 'true');
+        setAdminUser();
+        setIsLoading(false);
+        return;
+    }
+
+    // Standard Supabase Login
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -83,8 +129,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+    setIsLoading(true);
+    if (localStorage.getItem(ADMIN_KEY)) {
+        localStorage.removeItem(ADMIN_KEY);
+        setUser(null);
+    } else {
+        await supabase.auth.signOut();
+        setUser(null);
+    }
+    setIsLoading(false);
   };
 
   return (

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Zap, Layout, CreditCard, LogOut, Globe } from 'lucide-react';
+import { Zap, Layout, CreditCard, LogOut, Globe, FileInput } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import Button from './ui/Button';
@@ -11,6 +11,11 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { t, language, toggleLanguage } = useLanguage();
+
+  // Hide Navbar on Dashboard to allow for the custom Sidebar layout
+  if (location.pathname.startsWith('/dashboard')) {
+    return null;
+  }
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -42,6 +47,7 @@ const Navbar: React.FC = () => {
       <div className="hidden md:flex gap-6">
         <NavLink to="/dashboard" icon={<Layout size={18} />} label={t('nav.dashboard')} active={isActive('/dashboard')} />
         <NavLink to="/templates" icon={<Zap size={18} />} label={t('nav.templates')} active={isActive('/templates')} />
+        <NavLink to="/converter" icon={<FileInput size={18} />} label="Converter" active={isActive('/converter')} />
         <NavLink to="/pricing" icon={<CreditCard size={18} />} label={t('nav.pro')} active={isActive('/pricing')} />
       </div>
 

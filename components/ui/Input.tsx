@@ -7,14 +7,15 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<InputProps> = ({ label, className = '', ...props }) => {
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-5">
       {label && (
-        <label className="block text-sm font-bold mb-1 text-[#00FFFF] bg-black inline-block px-2 py-0.5 transform -skew-x-12 border border-[#00FFFF]/30">
-          <span className="transform skew-x-12 inline-block tracking-wider">{label}</span>
+        <label className="block text-xs font-black mb-2 text-[#00FFFF] tracking-widest uppercase flex items-center gap-2">
+          <span className="w-2 h-2 bg-[#00FFFF] inline-block"></span>
+          {label}
         </label>
       )}
       <input
-        className={`w-full bg-[#111] text-white border-2 border-[#333] px-3 py-2 focus:outline-none focus:border-[#00FFFF] focus:shadow-[0_0_15px_rgba(0,255,255,0.3)] transition-all placeholder-gray-600 ${className}`}
+        className={`w-full bg-[#0a0a0a] text-white border-2 border-[#333] px-4 py-3 focus:outline-none focus:border-[#00FFFF] focus:bg-black focus:shadow-[0_0_20px_rgba(0,255,255,0.1)] transition-all placeholder-gray-600 font-medium ${className}`}
         {...props}
       />
     </div>
