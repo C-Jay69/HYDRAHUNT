@@ -12,7 +12,12 @@ export default defineConfig(({ mode }) => {
       plugins: [react()],
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
+        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+        'process.env.SUPABASE_URL': JSON.stringify(env.SUPABASE_URL),
+        'process.env.SUPABASE_ANON_KEY': JSON.stringify(env.SUPABASE_ANON_KEY),
+        'process.env.STRIPE_PUBLISHABLE_KEY': JSON.stringify(env.STRIPE_PUBLISHABLE_KEY),
+        'process.env.HUNTER_PAYMENT_LINK_URL': JSON.stringify(env.HUNTER_PAYMENT_LINK_URL),
+        'process.env.HYDRA_PAYMENT_LINK_URL': JSON.stringify(env.HYDRA_PAYMENT_LINK_URL)
       },
       resolve: {
         alias: {

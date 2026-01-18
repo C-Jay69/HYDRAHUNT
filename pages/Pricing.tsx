@@ -26,8 +26,7 @@ const Pricing: React.FC = () => {
     }
 
     // 3. Initiate Stripe Checkout
-    const priceId = plan === 'hunter' ? 'price_hunter_id' : 'price_hydra_id';
-    await createCheckoutSession(priceId, user.email);
+    await createCheckoutSession(plan, user.email);
   };
 
   return (

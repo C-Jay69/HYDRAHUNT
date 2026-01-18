@@ -19,9 +19,7 @@ const Login: React.FC = () => {
     // If user is already logged in or just logged in, handle redirect
     if (user) {
         if (plan) {
-            // If they came from pricing, send them to checkout
-            const priceId = plan === 'hunter' ? 'price_hunter_id' : 'price_hydra_id';
-            createCheckoutSession(priceId, user.email);
+            createCheckoutSession(plan, user.email);
         } else {
             navigate('/dashboard');
         }

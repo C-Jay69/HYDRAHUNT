@@ -4,8 +4,7 @@ import { ResumeData } from '../types';
 
 const getAiClient = () => {
   try {
-    // Priority: Env Var -> Hardcoded fallback (User provided key)
-    const apiKey = process.env.API_KEY || 'AIzaSyChwGMOZvW1cLKslxqYJkSo0z7aQxeX67c';
+    const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
     if (!apiKey) return null;
     return new GoogleGenAI({ apiKey });
   } catch (e) {
