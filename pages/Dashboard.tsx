@@ -354,8 +354,7 @@ const Dashboard: React.FC = () => {
           </div>
         </section>
 
-        {/* MODAL: RESUME SELECTOR / CREATOR */}
-        {modalMode !== 'none' && (
+        {modalMode !== 'none' ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fadeIn">
            <div className="bg-[#111] max-w-lg w-full border-2 border-[#BEF754] shadow-[0_0_50px_rgba(190,247,84,0.2)] relative flex flex-col max-h-[80vh]">
               <div className="p-6 bg-[#BEF754]/10 border-b border-[#333] flex justify-between items-center">
@@ -436,7 +435,7 @@ const Dashboard: React.FC = () => {
               </div>
            </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
