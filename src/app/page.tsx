@@ -100,8 +100,9 @@ const Dashboard = ({ setCurrentView, setEditorResume }: { setCurrentView: (view:
         title: `Imported Resume ${resumes.length + 1}`,
       };
       setResumes([...resumes, newResume]);
-      setEditorResume(newResume);
-      setCurrentView('editor');
+      // Stay on dashboard after upload - don't redirect to editor
+      // setEditorResume(newResume);
+      // setCurrentView('editor');
     }, 2000);
   };
 
@@ -452,7 +453,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-400">Full Name</label>
+                      <label className="text-sm font-medium text-white">Full Name</label>
                       <Input
                         value={resume.fullName}
                         onChange={(e) => setResume({ ...resume, fullName: e.target.value })}
@@ -461,7 +462,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-gray-400">Email</label>
+                        <label className="text-sm font-medium text-white">Email</label>
                         <Input
                           value={resume.email}
                           onChange={(e) => setResume({ ...resume, email: e.target.value })}
@@ -469,7 +470,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-gray-400">Phone</label>
+                        <label className="text-sm font-medium text-white">Phone</label>
                         <Input
                           value={resume.phone}
                           onChange={(e) => setResume({ ...resume, phone: e.target.value })}
@@ -479,7 +480,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-medium text-gray-400">Location</label>
+                        <label className="text-sm font-medium text-white">Location</label>
                         <Input
                           value={resume.location}
                           onChange={(e) => setResume({ ...resume, location: e.target.value })}
@@ -487,7 +488,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-gray-400">Website</label>
+                        <label className="text-sm font-medium text-white">Website</label>
                         <Input
                           value={resume.website || ''}
                           onChange={(e) => setResume({ ...resume, website: e.target.value })}
@@ -496,7 +497,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-400">Professional Summary</label>
+                      <label className="text-sm font-medium text-white">Professional Summary</label>
                       <Textarea
                         value={resume.summary}
                         onChange={(e) => setResume({ ...resume, summary: e.target.value })}
@@ -520,14 +521,14 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                     {resume.experience.map((exp, index) => (
                       <div key={exp.id} className="p-4 bg-[#111] rounded-lg border border-[#222] space-y-4">
                         <div className="flex justify-between items-start">
-                          <div className="text-sm font-medium text-gray-400">Position {index + 1}</div>
+                          <div className="text-sm font-medium text-white">Position {index + 1}</div>
                           <Button variant="ghost" size="sm" className="text-[#FF00FF] hover:text-[#FF00FF] hover:bg-[#FF00FF]/10">
                             <Trash2 size={16} />
                           </Button>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="text-sm font-medium text-gray-400">Company</label>
+                            <label className="text-sm font-medium text-white">Company</label>
                             <Input
                               value={exp.company}
                               onChange={(e) => {
@@ -539,7 +540,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                             />
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-400">Role</label>
+                            <label className="text-sm font-medium text-white">Role</label>
                             <Input
                               value={exp.role}
                               onChange={(e) => {
@@ -553,7 +554,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="text-sm font-medium text-gray-400">Start Date</label>
+                            <label className="text-sm font-medium text-white">Start Date</label>
                             <Input
                               value={exp.startDate}
                               onChange={(e) => {
@@ -566,7 +567,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                             />
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-400">End Date</label>
+                            <label className="text-sm font-medium text-white">End Date</label>
                             <Input
                               value={exp.endDate}
                               onChange={(e) => {
@@ -580,7 +581,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                           </div>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-400">Description</label>
+                          <label className="text-sm font-medium text-white">Description</label>
                           <Textarea
                             value={exp.description}
                             onChange={(e) => {
@@ -612,13 +613,13 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                     {resume.education.map((edu, index) => (
                       <div key={edu.id} className="p-4 bg-[#111] rounded-lg border border-[#222] space-y-4">
                         <div className="flex justify-between items-start">
-                          <div className="text-sm font-medium text-gray-400">Education {index + 1}</div>
+                          <div className="text-sm font-medium text-white">Education {index + 1}</div>
                           <Button variant="ghost" size="sm" className="text-[#FF00FF] hover:text-[#FF00FF] hover:bg-[#FF00FF]/10">
                             <Trash2 size={16} />
                           </Button>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-400">School</label>
+                          <label className="text-sm font-medium text-white">School</label>
                           <Input
                             value={edu.school}
                             onChange={(e) => {
@@ -631,7 +632,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="text-sm font-medium text-gray-400">Degree</label>
+                            <label className="text-sm font-medium text-white">Degree</label>
                             <Input
                               value={edu.degree}
                               onChange={(e) => {
@@ -643,7 +644,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                             />
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-gray-400">Year</label>
+                            <label className="text-sm font-medium text-white">Year</label>
                             <Input
                               value={edu.year}
                               onChange={(e) => {
@@ -677,13 +678,13 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                     {resume.skills.map((skill, index) => (
                       <div key={skill.id} className="p-4 bg-[#111] rounded-lg border border-[#222] space-y-4">
                         <div className="flex justify-between items-start">
-                          <div className="text-sm font-medium text-gray-400">Skill {index + 1}</div>
+                          <div className="text-sm font-medium text-white">Skill {index + 1}</div>
                           <Button variant="ghost" size="sm" className="text-[#FF00FF] hover:text-[#FF00FF] hover:bg-[#FF00FF]/10">
                             <Trash2 size={16} />
                           </Button>
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-400">Skill Name</label>
+                          <label className="text-sm font-medium text-white">Skill Name</label>
                           <Input
                             value={skill.name}
                             onChange={(e) => {
@@ -695,7 +696,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                           />
                         </div>
                         <div>
-                          <label className="text-sm font-medium text-gray-400">Proficiency Level: {skill.level}/5</label>
+                          <label className="text-sm font-medium text-white">Proficiency Level: {skill.level}/5</label>
                           <Slider
                             value={[skill.level]}
                             onValueChange={(v) => {
@@ -759,7 +760,7 @@ const ResumeEditor = ({ resume, setCurrentView, setResume }: { resume: ResumeDat
                       </div>
                       <div className="text-4xl font-black text-[#00FFFF] mb-2">78/100</div>
                       <Progress value={78} className="bg-[#222] h-2" />
-                      <p className="text-sm text-gray-400 mt-2">Your resume is strong but could be optimized for ATS systems.</p>
+                      <p className="text-sm text-white mt-2">Your resume is strong but could be optimized for ATS systems.</p>
                     </div>
                   </CardContent>
                 </Card>
