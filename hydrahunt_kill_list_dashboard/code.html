@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt Kill List Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b154f8",
+                        "accent-cyan": "#00f2ff",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#000000",
+                        "card-dark": "#1a1022",
+                        "border-dark": "#382249",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-glow {
+            box-shadow: 0 0 15px rgba(177, 84, 248, 0.4);
+        }
+        .scanline {
+            background: linear-gradient(to bottom, transparent 50%, rgba(177, 84, 248, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex flex-col border-r border-border-dark bg-background-light dark:bg-background-dark/50">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="bg-primary aspect-square rounded-lg flex items-center justify-center p-2">
+<span class="material-symbols-outlined text-white text-2xl">pest_control_rodent</span>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-white uppercase">HYDRAHUNT</h1>
+<p class="text-primary text-[10px] font-bold tracking-widest uppercase">Tactical OS V1.0</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<div class="flex items-center gap-3 px-3 py-3 rounded-xl bg-primary/10 border border-primary/20 text-white cursor-pointer group active-glow">
+<span class="material-symbols-outlined text-primary">target</span>
+<p class="text-sm font-bold uppercase tracking-wide">Hunt Mode</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined">swords</span>
+<p class="text-sm font-bold uppercase tracking-wide">Weaponry</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined">map</span>
+<p class="text-sm font-bold uppercase tracking-wide">Territory</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined">lock</span>
+<p class="text-sm font-bold uppercase tracking-wide">Vault</p>
+</div>
+</nav>
+<!-- Hydra Scanner Widget -->
+<div class="m-4 p-4 rounded-xl bg-[#0a0a0a] border border-border-dark scanline">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-primary uppercase">Hydra Scanner</span>
+<div class="flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+</div>
+</div>
+<div class="space-y-1 font-mono text-[9px] text-slate-500">
+<p class="text-accent-cyan">&gt; Analyzing match... 98%</p>
+<p>&gt; Target: Google (L5 SWE)</p>
+<p>&gt; Protocol: Striking initiated</p>
+<p class="animate-pulse">&gt; Searching new nodes...</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto flex flex-col">
+<!-- Header Bar -->
+<header class="flex items-center justify-between px-8 py-6">
+<div>
+<h2 class="text-2xl font-bold tracking-tight text-white uppercase">The Kill List</h2>
+<p class="text-slate-500 text-sm">Targeting active opportunities across global sectors.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-xl h-10 px-6 border border-border-dark bg-card-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all">
+                        Refine Weapons
+                    </button>
+<button class="flex items-center justify-center rounded-xl h-10 px-6 bg-gradient-to-r from-primary to-accent-cyan text-white text-xs font-bold uppercase tracking-widest active-glow hover:brightness-110 transition-all">
+                        New Hunt
+                    </button>
+</div>
+</header>
+<!-- Stats Bar -->
+<section class="px-8 pb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-card-dark border border-border-dark rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-4xl">radar</span>
+</div>
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Active Hunts</p>
+<div class="flex items-baseline gap-2">
+<p class="text-white text-3xl font-bold">12</p>
+<p class="text-[#0bda73] text-xs font-bold">+20%</p>
+</div>
+</div>
+<div class="bg-card-dark border border-border-dark rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-4xl">target</span>
+</div>
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Targets Struck</p>
+<div class="flex items-baseline gap-2">
+<p class="text-white text-3xl font-bold">148</p>
+<p class="text-[#0bda73] text-xs font-bold">+5%</p>
+</div>
+</div>
+<div class="bg-card-dark border border-border-dark rounded-xl p-6 flex flex-col gap-2 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-4xl">handshake</span>
+</div>
+<p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Interviews Secured</p>
+<div class="flex items-baseline gap-2">
+<p class="text-white text-3xl font-bold">07</p>
+<p class="text-[#0bda73] text-xs font-bold">+2%</p>
+</div>
+</div>
+</section>
+<!-- The Kill List Table -->
+<section class="flex-1 px-8 py-4">
+<div class="rounded-xl border border-border-dark bg-card-dark/50 overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-border-dark/30 border-b border-border-dark">
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Target</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Objective</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Strike Date</th>
+<th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-dark">
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="bg-white/10 rounded-lg w-10 h-10 bg-center bg-no-repeat bg-cover" data-alt="Tech company minimalist corporate logo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDfrpBHSoMl4slPx34rKpzacRXu88Rian-m0o-n68s9DCYgNR1SHScEWqz_xcjvddw3jq_6hsuVwqLfb_HHxO3ZR48tbj4S2S41NMUHidaf9nmPHH2kvcal5YviNYFybINDCWsc_gOWlo2ah09Wa-2qkW_GHcGwxbViN-WzdhTC_mjSQWUto3glvmQK1oEsRRXEItcIl0C-YZB5ti4WbSuvUhoiPPeTh5gNL0qRW44nd7nVbrlx9UfmADvik4o7S3G7RkpFiXuN618')"></div>
+<span class="text-sm font-bold text-white uppercase">Stark Industries</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium text-slate-300">Lead AI Integration Engineer</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-mono text-slate-500">2023.10.24 // 09:42</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black tracking-tighter bg-primary/20 text-primary border border-primary/30 uppercase active-glow">
+                                        STRIKING
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="bg-white/10 rounded-lg w-10 h-10 bg-center bg-no-repeat bg-cover" data-alt="Futuristic biotech company logo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6c-5DTVEdp4_a5sS_9HZXB6raZpVi6dFUxjPGLLa2D2RKsjh2LTG_3HFKTttWH5CxFwlijXVRT84G9KlIkvbdztOBRTR5Abs6baJlDWvnuUeaSBL9nKYwUYRvNYgpL2YsXAknt3MabwUYa7L_sipDztpuq7oYQgsyGoN5JPDWP9IJSD7JfZHX6QH8VFrao8Zd2XIz5ZZQesrGUZOCuTC66tdy25d2JGXsjyXi5QyOW_gQhQRdv1jyAOuPk-71oknl8ri0RkjTack')"></div>
+<span class="text-sm font-bold text-white uppercase">Wayne Ent.</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium text-slate-300">Product Designer (R&amp;D)</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-mono text-slate-500">2023.10.22 // 14:15</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black tracking-tighter bg-accent-cyan/20 text-accent-cyan border border-accent-cyan/30 uppercase">
+                                        CONFIRMED
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="bg-white/10 rounded-lg w-10 h-10 bg-center bg-no-repeat bg-cover" data-alt="Defense contractor company logo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAc9m5nltEt_TtNzqsPU4oAUdI6kXJhvoB0ArM1TUIfgu6miyr1rxHG0uxmtzYtEAEy5RcgprcuMijoYj2bxMrliSZJhVFrRBXngXyTe-neRHGIW7ey_1c4VoS5estbIANN56_UbrzVWMtfJ6PkBEgY0NRqtYkmc6LZupAIY02Pk_b5z3A8ACzXBUGBT8TWBScr3Zt_krHxg31W1pExT5_m4DNxEzT9QyXq7bxKddr6tlumj1bU1F01s2E-f-Iv7Rw9BlbYPmJ80DY')"></div>
+<span class="text-sm font-bold text-white uppercase">Cyberdyne Systems</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium text-slate-300">Backend Lead Architect</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-mono text-slate-500">2023.10.20 // 18:30</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black tracking-tighter bg-red-500/10 text-red-500 border border-red-500/30 uppercase">
+                                        TERMINATED
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="bg-white/10 rounded-lg w-10 h-10 bg-center bg-no-repeat bg-cover" data-alt="Cloud infrastructure company logo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBT2OHYFbkuxBxw5TPadVW3gQ5DMA9rCKQhXjvwRSHmq7xUiQfsu8FQQuAMdMfFtbrktiF5JlYUVbe9x15Tz0afYKT0S4vhU3kcRhw_K98t_rU6oqAT_apwJGLNFokH8X7x8hiJVfX58_dNe26xT1d99ZfX3wOrit8HlmQqDyPk_qBFbkQimRYibhfPN0e1xFa36kNNmD5qV95AoIyFqvZhsCelcVc_mRhRfaUazBt0KMxnWiU6Pdb2laDQxLUg9Yt2YGAlORr6idU')"></div>
+<span class="text-sm font-bold text-white uppercase">Umbrella Corp</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-medium text-slate-300">Forward Deployed Engineer</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-sm font-mono text-slate-500">2023.10.18 // 11:05</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black tracking-tighter bg-primary/20 text-primary border border-primary/30 uppercase">
+                                        STRIKING
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</body></html>

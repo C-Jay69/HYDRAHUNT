@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt - Target Down</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df2f2",
+                        "accent-purple": "#a855f7",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#102222",
+                        "card-dark": "#2a2a2a",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .grid-overlay {
+            background-image: linear-gradient(rgba(13, 242, 242, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(13, 242, 242, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent, rgba(13, 242, 242, 0.2), transparent);
+            height: 100px;
+            width: 100%;
+            position: absolute;
+            top: -100px;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            0% { top: -100px; }
+            100% { top: 100vh; }
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #a855f7, #0df2f2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .data-fragment {
+            position: absolute;
+            background: #0df2f2;
+            width: 2px;
+            height: 2px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-black font-display overflow-x-hidden min-h-screen relative">
+<!-- Background Effects -->
+<div class="fixed inset-0 grid-overlay z-0 pointer-events-none"></div>
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+<div class="scan-line"></div>
+<!-- Simulated Particles -->
+<div class="data-fragment top-1/4 left-1/4 w-1 h-4 rotate-45"></div>
+<div class="data-fragment top-3/4 left-1/3 w-4 h-1 rotate-12"></div>
+<div class="data-fragment top-1/2 left-2/3 w-2 h-2"></div>
+<div class="data-fragment top-10 left-3/4 w-1 h-8 opacity-20"></div>
+</div>
+<div class="relative z-10 flex flex-col min-h-screen">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-white/10 px-6 py-3 bg-black/50 backdrop-blur-md">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-wider uppercase">HydraHunt</h2>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-white/5 hover:bg-white/10 text-white transition-all">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-white/5 hover:bg-white/10 text-white transition-all">
+<span class="material-symbols-outlined text-xl">account_circle</span>
+</button>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-12 max-w-5xl mx-auto w-full">
+<!-- Hero Graphic -->
+<div class="relative mb-8 group">
+<div class="absolute inset-0 bg-primary/20 blur-[100px] rounded-full scale-75 group-hover:scale-100 transition-transform duration-700"></div>
+<div class="relative z-10 w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+<!-- Target Crosshair -->
+<div class="absolute inset-0 border-[1px] border-primary/30 rounded-full animate-pulse"></div>
+<div class="absolute inset-4 border-[2px] border-primary/50 border-dashed rounded-full rotate-45"></div>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-primary"></div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0.5 h-8 bg-primary"></div>
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-0.5 bg-primary"></div>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-0.5 bg-primary"></div>
+<!-- Hydra Silhouette -->
+<div class="w-full h-full p-8 opacity-90 drop-shadow-[0_0_15px_rgba(13,242,242,0.5)]">
+<svg class="w-full h-full text-white/10 group-hover:text-primary/20 transition-colors" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z" fill="currentColor" stroke="white" stroke-width="0.5"></path>
+<path d="M12 4L6 19L12 16L18 19L12 4Z" fill="rgba(13, 242, 242, 0.4)"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Headline -->
+<div class="text-center mb-6">
+<h1 class="gradient-text text-6xl md:text-8xl font-black tracking-tighter uppercase mb-4 italic">TARGET DOWN</h1>
+<p class="text-white text-lg md:text-xl font-medium leading-relaxed max-w-2xl mx-auto px-4 opacity-90">
+                    Hydra never misses. <span class="text-primary font-bold">TechVanguard Corp</span> has requested an interview. Your strike was successful.
+                </p>
+</div>
+<!-- Interview Details Card -->
+<div class="w-full max-w-lg mb-12">
+<div class="bg-card-dark border border-white/10 rounded-xl overflow-hidden shadow-2xl backdrop-blur-sm">
+<div class="p-6 flex flex-col md:flex-row gap-6 items-center">
+<div class="w-24 h-24 bg-gradient-to-br from-primary/20 to-accent-purple/20 rounded-lg flex items-center justify-center border border-white/5 relative overflow-hidden shrink-0">
+<div class="absolute inset-0 bg-[url('https://placeholder.pics/svg/100')] bg-cover opacity-30" data-alt="TechVanguard Corp logo pattern"></div>
+<span class="material-symbols-outlined text-primary text-4xl relative z-10">verified</span>
+</div>
+<div class="flex-1 text-center md:text-left">
+<p class="text-white text-2xl font-bold tracking-tight mb-1">Position: Senior Developer</p>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-center md:justify-start gap-2 text-primary/80">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<p class="text-sm font-medium uppercase tracking-widest">Friday, 2 PM EST</p>
+</div>
+<a class="inline-flex items-center justify-center md:justify-start gap-2 text-white/60 hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-sm">calendar_month</span>
+<span class="text-sm border-b border-white/20 group-hover:border-primary">Add to Mission Log (Calendar)</span>
+</a>
+</div>
+</div>
+</div>
+<div class="bg-black/40 px-6 py-3 border-t border-white/5 flex items-center justify-between">
+<span class="text-[10px] text-white/30 uppercase tracking-[0.3em]">Status: Confirmed</span>
+<span class="text-[10px] text-primary/50 uppercase tracking-[0.3em]">ID: HT-9942-X</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+<button class="flex-1 bg-gradient-to-r from-accent-purple to-primary hover:scale-[1.02] active:scale-95 transition-all rounded-lg h-14 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(13,242,242,0.3)] group">
+<span class="text-black font-bold text-lg uppercase tracking-wider">Prepare for Combat</span>
+<span class="material-symbols-outlined text-black font-bold group-hover:translate-x-1 transition-transform">bolt</span>
+</button>
+<button class="flex-1 border border-white/20 hover:bg-white/5 transition-all rounded-lg h-14 flex items-center justify-center gap-3 group">
+<span class="text-white font-bold text-lg uppercase tracking-wider">View Mission Intel</span>
+<span class="material-symbols-outlined text-white font-bold group-hover:rotate-45 transition-transform text-sm">open_in_new</span>
+</button>
+</div>
+<!-- Microcopy Footer -->
+<footer class="mt-20 text-center">
+<p class="text-white/40 text-sm italic tracking-[0.15em] uppercase px-4">
+                    The prey has been lured. Now, claim your territory.
+                </p>
+<div class="mt-4 flex justify-center gap-1">
+<div class="h-1 w-8 bg-primary/20 rounded-full"></div>
+<div class="h-1 w-2 bg-primary/40 rounded-full"></div>
+<div class="h-1 w-1 bg-primary/60 rounded-full"></div>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

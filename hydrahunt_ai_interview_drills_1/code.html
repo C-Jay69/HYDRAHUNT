@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt AI | Feed the Hydra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df2f2",
+                        "secondary": "#a855f7",
+                        "background-dark": "#000000",
+                        "panel": "#1a1a1a",
+                        "card": "#2a2a2a",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply font-display bg-black text-white;
+            }
+        }
+        .glow-cyan-border {
+            box-shadow: 0 0 15px rgba(13, 242, 242, 0.3), inset 0 0 10px rgba(13, 242, 242, 0.1);
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #a855f7 0%, #0df2f2 100%);
+        }
+        .hydra-pulse {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(13, 242, 242, 0.1);
+            position: absolute;
+            animation: scan 4s linear infinite;
+        }
+        @keyframes scan {
+            from { top: 0%; }
+            to { top: 100%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<header class="flex items-center justify-between border-b border-white/10 px-8 py-4 bg-black/50 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-2">
+<div class="size-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<h1 class="text-2xl font-bold tracking-tighter italic">HYDRAHUNT <span class="text-primary">AI</span></h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase tracking-[0.3em] text-white/40">Onboarding Protocol</span>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold text-primary">Step 1 of 3</span>
+<div class="flex gap-1">
+<div class="h-1 w-6 bg-primary rounded-full"></div>
+<div class="h-1 w-6 bg-white/10 rounded-full"></div>
+<div class="h-1 w-6 bg-white/10 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center p-6 max-w-4xl mx-auto w-full">
+<div class="w-full text-center mb-10">
+<h2 class="text-4xl font-bold mb-2 tracking-tight">FEED THE HYDRA</h2>
+<p class="text-gray-400 text-lg">Initial data ingestion required to calibrate your hunting profile.</p>
+</div>
+<div class="w-full relative group">
+<div class="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+<div class="relative bg-panel border-2 border-primary/30 rounded-2xl p-12 glow-cyan-border flex flex-col items-center justify-center overflow-hidden min-h-[400px]">
+<div class="scanline"></div>
+<div class="mb-8 relative">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full hydra-pulse"></div>
+<div class="relative text-primary/80">
+<span class="material-symbols-outlined !text-8xl select-none">hub</span>
+<div class="absolute -top-4 -left-4 text-primary/40 rotate-[-15deg]"><span class="material-symbols-outlined !text-5xl">smart_toy</span></div>
+<div class="absolute -top-4 -right-4 text-primary/40 rotate-[15deg]"><span class="material-symbols-outlined !text-5xl">psychology</span></div>
+</div>
+</div>
+<p class="text-xl font-medium mb-2 max-w-md mx-auto">
+                Feed me your messy documents. 
+            </p>
+<p class="text-gray-400 text-sm mb-8 italic">
+                PDFs, TXT, random notes, bullet dumps — I eat everything.
+            </p>
+<button class="gradient-btn px-10 py-4 rounded-lg font-bold uppercase tracking-widest text-black hover:scale-105 transition-transform shadow-lg shadow-primary/20 flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined font-bold">upload_file</span>
+                Select Intel
+            </button>
+<p class="text-xs text-white/30 uppercase tracking-widest">or drop files anywhere</p>
+</div>
+</div>
+<div class="w-full mt-8 max-w-lg">
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">target</span>
+                Targeting specific field?
+            </label>
+<input class="w-full bg-card border-white/10 rounded-lg py-3 px-4 text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all text-white placeholder:text-white/20" placeholder="e.g. Quantitative Finance, Neural Engineering..." type="text"/>
+</div>
+</div>
+<div class="w-full mt-12 space-y-4">
+<div class="flex items-center justify-between border-b border-white/10 pb-2">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-primary">Ingested Intel</h3>
+<span class="text-[10px] text-white/40 uppercase">3 Files Uploaded</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-card p-4 rounded-xl border border-white/5 relative group overflow-hidden">
+<div class="flex items-start justify-between mb-3">
+<span class="material-symbols-outlined text-primary">article</span>
+<span class="text-[9px] font-bold uppercase bg-primary/10 text-primary px-2 py-0.5 rounded">Digesting...</span>
+</div>
+<p class="text-sm font-medium truncate mb-2">Resume_Final_v2.pdf</p>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[45%] animate-pulse"></div>
+</div>
+</div>
+<div class="bg-card p-4 rounded-xl border border-white/5 relative group overflow-hidden">
+<div class="flex items-start justify-between mb-3">
+<span class="material-symbols-outlined text-secondary">notes</span>
+<span class="text-[9px] font-bold uppercase bg-secondary/10 text-secondary px-2 py-0.5 rounded text-purple-400">Analyzing...</span>
+</div>
+<p class="text-sm font-medium truncate mb-2">Project_Chaos_Notes.txt</p>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[82%]"></div>
+</div>
+</div>
+<div class="bg-card p-4 rounded-xl border border-primary/20 relative group overflow-hidden bg-primary/5">
+<div class="flex items-start justify-between mb-3">
+<span class="material-symbols-outlined text-primary">security</span>
+<span class="text-[9px] font-bold uppercase bg-primary text-black px-2 py-0.5 rounded">Weaponized</span>
+</div>
+<p class="text-sm font-medium truncate mb-2">Skill_Dump_2024.docx</p>
+<div class="w-full h-1 bg-primary/20 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="p-8 flex justify-end">
+<div class="flex items-center gap-6">
+<div class="hidden md:flex flex-col items-end opacity-40">
+<span class="text-[10px] font-bold uppercase tracking-widest">Status</span>
+<span class="text-xs italic">Awaiting full digestion...</span>
+</div>
+<button class="px-10 py-3 rounded bg-white/5 text-white/20 text-sm font-bold uppercase tracking-[0.2em] cursor-not-allowed border border-white/10 transition-all flex items-center gap-3" disabled="">
+            Start the Hunt
+            <span class="material-symbols-outlined text-sm">lock</span>
+</button>
+</div>
+</footer>
+
+</body></html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt AI | Payload Forge</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df2f2",
+                        "secondary": "#a855f7",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#000000",
+                        "panel-dark": "#111827",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .strike-zone {
+            position: relative;
+            background: rgba(13, 242, 242, 0.1);
+            border-bottom: 2px dashed #0df2f2;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .strike-zone:hover {
+            background: rgba(13, 242, 242, 0.2);
+            color: #0df2f2;
+        }
+        .glow-border {
+            box-shadow: 0 0 10px rgba(13, 242, 242, 0.1);
+        }
+        .gradient-btn {
+            background: linear-gradient(90deg, #a855f7 0%, #0df2f2 100%);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #0df2f2;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px #0df2f2;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-100 min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-6 py-3 bg-white dark:bg-background-dark z-50">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<svg class="size-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight uppercase">HydraHunt <span class="text-primary italic">AI</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">DASHBOARD</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">MISSIONS</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">ARSENAL</a>
+<a class="text-sm font-medium text-primary border-b-2 border-primary" href="#">PAYLOAD FORGE</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-end mr-2">
+<span class="text-[10px] text-primary font-bold uppercase tracking-widest">System Status</span>
+<span class="text-xs text-green-500 font-mono">OPERATIONAL</span>
+</div>
+<div class="size-10 rounded-full border border-primary/50 bg-cover bg-center" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCbbu2iXdz7jhNkf5PoTpHDz8kkBJl1g1OodDDFHnKLymbSxEcaBkIWtuzA8G8XaB8EZ6nBsS3Qi9AJusB5H8RreJExRpIJiKGV6j6EW0MqTnjvdb8moOtlIE72_d-MeA4x4TV9HZ_StgJynI8uqghPOV3CoGIviQdCxKpmiJiX26mBwU3Wvbbvx1WJiKDdBWaEhuGj0reDJhoP-hw22aeMn-l2q9h88luE6Oh9jwY9efycJ1mgHwAPMMcSf9ITejj-W-2CQPs9pWg")'></div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- Sidebar: Smart Templates -->
+<aside class="w-64 border-r border-gray-200 dark:border-gray-800 flex flex-col bg-white dark:bg-background-dark">
+<div class="p-6">
+<h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-4">Smart Templates</h3>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3 px-3 py-3 rounded-lg bg-primary/10 border border-primary/30 group cursor-pointer transition-all">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">person_search</span>
+<div>
+<p class="text-sm font-bold text-primary">The Infiltrator</p>
+<p class="text-[10px] text-gray-400 uppercase">Stealth &amp; Soft Skills</p>
+</div>
+</div>
+<div class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 border border-transparent group cursor-pointer transition-all">
+<span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors">shield_with_heart</span>
+<div>
+<p class="text-sm font-bold text-gray-700 dark:text-gray-300">The Expert</p>
+<p class="text-[10px] text-gray-500 uppercase">Tech &amp; Authority</p>
+</div>
+</div>
+<div class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 border border-transparent group cursor-pointer transition-all">
+<span class="material-symbols-outlined text-gray-500 group-hover:text-primary transition-colors">bolt</span>
+<div>
+<p class="text-sm font-bold text-gray-700 dark:text-gray-300">The Disruptor</p>
+<p class="text-[10px] text-gray-500 uppercase">Aggressive &amp; Bold</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 border-t border-gray-200 dark:border-gray-800">
+<div class="bg-gray-900 rounded-lg p-3 border border-gray-800">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] font-bold text-primary uppercase">API Quota</span>
+<span class="text-[10px] text-white">84%</span>
+</div>
+<div class="w-full bg-gray-800 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[84%]"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Mission Parameters -->
+<section class="flex-1 border-r border-gray-200 dark:border-gray-800 flex flex-col bg-gray-50 dark:bg-panel-dark overflow-y-auto">
+<div class="p-8 max-w-2xl mx-auto w-full space-y-8">
+<div>
+<h1 class="text-3xl font-black uppercase tracking-tighter mb-2">Payload Forge</h1>
+<p class="text-gray-500 dark:text-gray-400">Configure mission parameters to generate optimized career assets.</p>
+</div>
+<!-- Job Intel -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-sm font-bold uppercase tracking-wider text-primary">Job Intel (JD)</label>
+<span class="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded uppercase font-bold">Input Required</span>
+</div>
+<textarea class="w-full bg-white dark:bg-background-dark border border-gray-200 dark:border-gray-800 rounded-lg p-4 text-sm font-mono focus:ring-1 focus:ring-primary focus:border-primary outline-none min-h-[200px]" placeholder="PASTE TARGET REQUIREMENTS HERE..."></textarea>
+</div>
+<!-- Weapon Select -->
+<div class="space-y-3">
+<label class="text-sm font-bold uppercase tracking-wider text-primary">Weapon Selection (Resume)</label>
+<div class="relative">
+<select class="w-full bg-white dark:bg-background-dark border border-gray-200 dark:border-gray-800 rounded-lg p-4 text-sm appearance-none focus:ring-1 focus:ring-primary outline-none">
+<option>SR_ENGINEER_LETHAL_V4.PDF</option>
+<option>CREATIVE_DIRECTOR_GEN_V2.PDF</option>
+<option>TECH_LEAD_STRATEGY_FINAL.PDF</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-primary">expand_more</span>
+</div>
+</div>
+<!-- Tone Slider -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<label class="text-sm font-bold uppercase tracking-wider text-primary">Tone Intensity</label>
+<span class="text-xs font-mono text-gray-400">LEVEL: <span class="text-primary">LETHAL</span></span>
+</div>
+<div class="px-2">
+<input class="w-full h-1.5 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="85"/>
+<div class="flex justify-between mt-2">
+<span class="text-[10px] text-gray-500 font-bold uppercase">Professional</span>
+<span class="text-[10px] text-gray-500 font-bold uppercase">Lethal</span>
+</div>
+</div>
+</div>
+<button class="w-full py-4 rounded-lg bg-primary text-black font-black uppercase tracking-widest hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                        Generate Payload
+                    </button>
+</div>
+</section>
+<!-- Right Panel: Payload Preview -->
+<section class="flex-1 flex flex-col bg-white dark:bg-background-dark overflow-hidden">
+<div class="p-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-bold uppercase tracking-widest text-gray-500">Payload Preview</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+</button>
+<button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors text-gray-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">download</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-12 font-serif text-lg leading-relaxed dark:text-gray-300">
+<div class="max-w-xl mx-auto space-y-6">
+<p class="font-mono text-xs text-primary mb-8 tracking-[0.2em]">GENERATED_STRATEGY_TIMESTAMP_092324</p>
+<p>Dear Hiring Lead,</p>
+<p>I am writing to express my interest in the Senior Architect role. Throughout my career, I have developed a <span class="strike-zone px-1 rounded">unique tactical methodology</span> for scaling distributed systems that aligns perfectly with your mission objectives.</p>
+<p>At my previous deployment, I successfully <span class="strike-zone px-1 rounded">disrupted legacy infrastructure</span> by implementing a mesh-network architecture that reduced latency by 45%. This wasn't just an optimization; it was a total overhaul of how we handled data packets across three continents.</p>
+<p>Your team is looking for someone who can <span class="strike-zone px-1 rounded">execute with precision</span> under high-stress conditions. My experience in high-frequency trading platforms has forged my ability to write code that is not just functional, but <span class="strike-zone px-1 rounded">architecturally lethal</span>.</p>
+<p>I look forward to discussing how my arsenal of skills can support your next campaign.</p>
+<p>Regards,<br/><span class="font-bold text-primary tracking-widest uppercase">Operator_Alpha</span></p>
+</div>
+</div>
+<!-- Sticky Action Bar -->
+<div class="p-6 border-t border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-xl mx-auto flex items-center gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-2">
+<span class="text-[10px] font-bold text-gray-500 uppercase">Payload Strength</span>
+<div class="flex gap-0.5">
+<div class="w-3 h-1 bg-primary"></div>
+<div class="w-3 h-1 bg-primary"></div>
+<div class="w-3 h-1 bg-primary"></div>
+<div class="w-3 h-1 bg-primary"></div>
+<div class="w-3 h-1 bg-gray-700"></div>
+</div>
+</div>
+</div>
+<button class="px-8 py-3 rounded-lg gradient-btn text-white font-bold uppercase tracking-wider flex items-center gap-2 hover:shadow-[0_0_20px_rgba(13,242,242,0.3)] transition-all">
+                            Finalize Payload
+                            <span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Strike Zone Popup Tooltip (Simulated) -->
+<div class="fixed bottom-24 right-48 bg-gray-900 border border-primary p-3 rounded-lg shadow-2xl z-[100] w-48 scale-90 opacity-0 pointer-events-none group-hover:opacity-100">
+<p class="text-[10px] font-bold text-primary uppercase mb-2">Strike Zone HUD</p>
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-2 text-xs text-white hover:bg-gray-800 p-1.5 rounded transition-colors">
+<span class="material-symbols-outlined text-sm">refresh</span> Re-roll Segment
+            </button>
+<button class="flex items-center gap-2 text-xs text-white hover:bg-gray-800 p-1.5 rounded transition-colors">
+<span class="material-symbols-outlined text-sm">database</span> Increase Hardness
+            </button>
+</div>
+</div>
+</body></html>

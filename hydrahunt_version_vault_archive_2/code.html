@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt Beastmaster Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df2f2",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#102222",
+                        "card-dark": "#2a2a2a",
+                        "accent-purple": "#8b5cf6",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .gradient-text {
+            @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-purple to-primary;
+        }
+        .tactical-border {
+            @apply border border-white/10 focus-within:border-primary/50 transition-colors;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(13, 242, 242, 0.2);
+        }
+        .toggle-switch {
+            @apply relative inline-flex h-6 w-11 items-center rounded-full bg-white/10 transition-colors;
+        }
+        .toggle-active {
+            @apply bg-primary;
+        }
+        .toggle-dot {
+            @apply inline-block h-4 w-4 transform rounded-full bg-white transition-transform;
+        }
+        .toggle-dot-active {
+            @apply translate-x-6 bg-black;
+        }
+        .toggle-dot-inactive {
+            @apply translate-x-1;
+        }
+    </style>
+</head>
+<body class="bg-black font-display text-white selection:bg-primary/30 min-h-screen">
+<header class="border-b border-solid border-white/10 px-8 py-3 bg-black sticky top-0 z-50">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tighter">HYDRAHUNT</h2>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-gray-400 hover:text-primary text-sm font-medium uppercase tracking-widest transition-colors" href="#">Armory</a>
+<a class="text-gray-400 hover:text-primary text-sm font-medium uppercase tracking-widest transition-colors" href="#">Strikes</a>
+<a class="text-primary text-sm font-medium uppercase tracking-widest border-b border-primary" href="#">Vault</a>
+<a class="text-gray-400 hover:text-primary text-sm font-medium uppercase tracking-widest transition-colors" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-lg bg-white/5 hover:bg-primary/20 text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full border border-primary/30 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDtluuZ_e9e8ahsoQyLP8LBl4GJux-sEoYolasQC-70q68QgXmDdkgwv2xcZXO5qfP1OlJOZM7qERmwyv207kmOrbrmK6kpHExwmGECHFUu8HW7uL47ig7-TbOwUX2gNbf8W0OPqGhAfGjXkxgXNGF2tf9ULyuC_Brz76Tr2i3uFU7EWhQqN0AHr-LCQ3PCHF5JJG1FibI1nPfFloh-4OTMiqW7El5-NimjKIr2bZ8KnZMxCoXoU9vo2E-isxUEwZmOjzwxjI0K6nI')"></div>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto grid grid-cols-12 gap-8 px-8 py-10">
+<aside class="col-span-3">
+<div class="sticky top-28 flex flex-col gap-1">
+<h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-4 px-4">Tactical Command</h3>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-2 border-primary font-bold text-sm uppercase tracking-wider group" href="#tactical-profile">
+<span class="material-symbols-outlined text-xl">shield_person</span>
+                    Tactical Profile
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white transition-all font-bold text-sm uppercase tracking-wider group" href="#strike-preferences">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">target</span>
+                    Strike Preferences
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white transition-all font-bold text-sm uppercase tracking-wider group" href="#subscription">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">credit_card</span>
+                    Subscription &amp; Billing
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-white/5 hover:text-white transition-all font-bold text-sm uppercase tracking-wider group" href="#security">
+<span class="material-symbols-outlined text-xl group-hover:text-primary">lock</span>
+                    Security
+                </a>
+<div class="mt-8 pt-8 border-t border-white/5">
+<button class="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-500/10 transition-all font-bold text-sm uppercase tracking-wider w-full">
+<span class="material-symbols-outlined text-xl">logout</span>
+                        Decommission Account
+                    </button>
+</div>
+</div>
+</aside>
+<div class="col-span-9 flex flex-col gap-10">
+<div class="flex flex-col gap-2">
+<h1 class="text-5xl font-black gradient-text tracking-tight uppercase">Beastmaster Settings</h1>
+<p class="text-gray-500 font-medium tracking-wide">CONFIGURE YOUR HUNTER IDENTITY AND STRIKE PARAMETERS</p>
+</div>
+<section class="space-y-6" id="tactical-profile">
+<div class="flex items-center gap-3 border-b border-white/10 pb-2">
+<span class="material-symbols-outlined text-primary">person</span>
+<h2 class="text-xl font-bold uppercase tracking-tight">Tactical Profile</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-card-dark p-6 rounded-xl border border-white/10">
+<h3 class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Hunter Identity</h3>
+<div class="space-y-4">
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-gray-500 uppercase">Callsign / Name</label>
+<input class="w-full bg-black border border-white/10 rounded px-4 py-2.5 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" type="text" value="Alexander V. Thorne"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-gray-500 uppercase">Operational Role</label>
+<input class="w-full bg-black border border-white/10 rounded px-4 py-2.5 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" type="text" value="Lead Systems Architect"/>
+</div>
+</div>
+</div>
+<div class="bg-card-dark p-6 rounded-xl border border-white/10">
+<h3 class="text-xs font-bold text-primary uppercase tracking-widest mb-6">Linked Comm-Channels</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-black border border-white/5 rounded">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary/10 flex items-center justify-center rounded text-primary">
+<span class="material-symbols-outlined text-xl">mail</span>
+</div>
+<div>
+<p class="text-xs font-bold">Primary Email</p>
+<p class="text-[10px] text-gray-500">thorne.a@tactical.io</p>
+</div>
+</div>
+<span class="text-[10px] text-green-500 font-bold px-2 py-0.5 bg-green-500/10 rounded">VERIFIED</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-black border border-white/5 rounded">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-accent-purple/10 flex items-center justify-center rounded text-accent-purple">
+<span class="material-symbols-outlined text-xl">link</span>
+</div>
+<div>
+<p class="text-xs font-bold">LinkedIn Intel</p>
+<p class="text-[10px] text-gray-500">linkedin.com/in/avthorne</p>
+</div>
+</div>
+<button class="text-[10px] text-primary hover:underline font-bold">RE-SYNC</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-6" id="strike-preferences">
+<div class="flex items-center gap-3 border-b border-white/10 pb-2">
+<span class="material-symbols-outlined text-primary">bolt</span>
+<h2 class="text-xl font-bold uppercase tracking-tight">Strike Preferences</h2>
+</div>
+<div class="bg-card-dark rounded-xl border border-white/10 overflow-hidden">
+<div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+<div class="p-6 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xs font-bold text-white uppercase tracking-widest">Auto-Strike Mode</h3>
+<p class="text-[10px] text-gray-500 mt-1">AI automatically initiates strikes on 95%+ matches</p>
+</div>
+<div class="toggle-switch toggle-active">
+<span class="toggle-dot toggle-dot-active"></span>
+</div>
+</div>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<h3 class="text-xs font-bold text-white uppercase tracking-widest">Lethality Threshold</h3>
+<p class="text-[10px] text-gray-500 mt-1">Minimum AI score required for processing</p>
+</div>
+<div class="pt-2">
+<div class="flex justify-between mb-2">
+<span class="text-[10px] font-bold text-primary uppercase">Current: 85%</span>
+<span class="text-[10px] font-bold text-gray-600 uppercase">Extreme</span>
+</div>
+<input class="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="85"/>
+</div>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<h3 class="text-xs font-bold text-white uppercase tracking-widest">Notification Intensity</h3>
+<p class="text-[10px] text-gray-500 mt-1">Frequency of tactical updates</p>
+</div>
+<select class="w-full bg-black border border-white/10 rounded px-3 py-2 text-xs font-bold uppercase tracking-widest text-primary focus:ring-1 focus:ring-primary outline-none">
+<option>Stealth (Critical Only)</option>
+<option selected="">Operational (Balanced)</option>
+<option>Full Recon (All Events)</option>
+</select>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-6" id="subscription">
+<div class="flex items-center gap-3 border-b border-white/10 pb-2">
+<span class="material-symbols-outlined text-primary">workspace_premium</span>
+<h2 class="text-xl font-bold uppercase tracking-tight">Subscription</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-gradient-to-br from-card-dark to-black p-8 rounded-xl border border-primary/20 relative overflow-hidden group">
+<div class="absolute -right-10 -top-10 size-40 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-black text-black bg-primary px-2 py-0.5 rounded tracking-tighter uppercase">Active Protocol</span>
+<span class="text-gray-400 text-[10px] font-mono tracking-widest">EXP: 12-2024</span>
+</div>
+<h3 class="text-4xl font-black italic tracking-tighter">HYDRA MODE</h3>
+<p class="text-gray-400 text-sm mt-2 max-w-sm">Unlimited strikes, priority neural processing, and multi-region deployment enabled.</p>
+</div>
+<div class="flex flex-col gap-3 w-full md:w-auto">
+<button class="bg-primary text-black px-6 py-2.5 rounded font-bold uppercase text-xs hover:shadow-[0_0_15px_rgba(13,242,242,0.4)] transition-all">Change Tier</button>
+<button class="bg-white/5 border border-white/10 text-white px-6 py-2.5 rounded font-bold uppercase text-xs hover:bg-white/10 transition-all">Cancel Mission</button>
+</div>
+</div>
+</div>
+<div class="bg-card-dark p-6 rounded-xl border border-white/10">
+<h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Payment Intel</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary">credit_card</span>
+<span class="font-mono">•••• •••• •••• 9012</span>
+</div>
+<div class="flex flex-col gap-2">
+<button class="text-[10px] font-bold text-primary uppercase text-left hover:underline">Update Card Details</button>
+<button class="text-[10px] font-bold text-gray-500 uppercase text-left hover:underline">View Transaction Log</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="max-w-[1440px] mx-auto px-8 py-10 flex flex-col items-center gap-4 text-gray-600">
+<div class="h-px w-full bg-white/5 mb-4"></div>
+<p class="text-[10px] font-mono tracking-widest uppercase">HydraHunt Tactical Systems v2.4.9 // Beastmaster Console Active</p>
+</footer>
+
+</body></html>

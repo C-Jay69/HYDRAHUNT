@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt | Strike Analysis Critique</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9a23f6",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0a050e",
+                        "card-dark": "#160b1e",
+                        "danger": "#ff4d4d",
+                        "success": "#0bda73"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(154, 35, 246, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(154, 35, 246, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #9a23f6, transparent);
+            box-shadow: 0 0 15px #9a23f6;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            left: 0;
+            z-index: 20;
+        }
+        .resume-heatmap-soft {
+            background-color: rgba(255, 77, 77, 0.15);
+            border-bottom: 2px solid #ff4d4d;
+        }
+        .resume-heatmap-lethal {
+            background-color: rgba(154, 35, 246, 0.15);
+            border-bottom: 2px solid #9a23f6;
+        }
+        .glass {
+            background: rgba(22, 11, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(154, 35, 246, 0.2);
+        }
+        @keyframes pulse-hydra {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        .hydra-pulse {
+            animation: pulse-hydra 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-[#382249] px-6 py-3 bg-background-dark/80 backdrop-blur-md z-50">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary hydra-pulse">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-black tracking-tighter uppercase italic">HydraHunt <span class="text-primary">AI</span></h2>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-bold uppercase tracking-widest text-[#b18fcc] hover:text-white transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-bold uppercase tracking-widest text-primary" href="#">Strike Analysis</a>
+<a class="text-sm font-bold uppercase tracking-widest text-[#b18fcc] hover:text-white transition-colors" href="#">Armory</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-[#382249] text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="Cyberpunk style user avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwgUZAgYCS29QaOjrwdDC0WhCf0HgfPr3KT_YgSP367OmkR1sHz2GkQOW3SYfW6us0Ke4Hv64QtmVDFDUTikAnaYqj2ZeiYjfU-BwkfQA8qFhYLyuDUaQN9PFzKY9MER15AFA7dzE-WW5hC3Sni9wRJdIlnz9AgB_4YRZsgEcLQ61t8gm6iAERffm4GCCGD-r4fCxnePbEDJ-H6TQbF63fzuRJ841qFMl4OT0KjKNqpJgcRN3VjI8cxmo1vkzIEExpL85UjbCeB40");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex overflow-hidden grid-bg">
+<!-- Left Sidebar: The Verdict -->
+<aside class="w-80 border-r border-[#382249] bg-background-dark/50 flex flex-col p-6 overflow-y-auto">
+<h3 class="text-xs font-black uppercase tracking-[0.2em] text-[#b18fcc] mb-4">Tactical Status</h3>
+<div class="glass rounded-xl p-8 mb-6 flex flex-col items-center justify-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors"></div>
+<span class="text-7xl font-black text-white drop-shadow-[0_0_15px_rgba(154,35,246,0.6)]">B-</span>
+<span class="text-danger text-xs font-bold uppercase mt-2 tracking-widest">Weakness Detected</span>
+</div>
+<div class="space-y-4">
+<h4 class="text-xs font-bold uppercase text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-sm">warning</span> Critical Vulnerabilities
+                </h4>
+<div class="flex flex-col gap-3">
+<div class="p-3 bg-danger/10 border-l-4 border-danger rounded-r-lg">
+<p class="text-sm font-bold text-white uppercase tracking-tight">Passive Language</p>
+<p class="text-[11px] text-[#b18fcc]">4 instances detected in Experience section.</p>
+</div>
+<div class="p-3 bg-danger/10 border-l-4 border-danger rounded-r-lg">
+<p class="text-sm font-bold text-white uppercase tracking-tight">Generic Skills</p>
+<p class="text-[11px] text-[#b18fcc]">Target audience finds 'Team Player' irrelevant.</p>
+</div>
+<div class="p-3 bg-white/5 border-l-4 border-white/20 rounded-r-lg opacity-50">
+<p class="text-sm font-bold text-white uppercase tracking-tight">Formatting Breach</p>
+<p class="text-[11px] text-[#b18fcc]">Non-standard font identified in footer.</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-6">
+<div class="flex flex-col gap-2 p-4 rounded-xl border border-[#503069] bg-[#160b1e]">
+<p class="text-xs font-medium text-[#b18fcc] uppercase tracking-widest">Threat Level</p>
+<div class="flex items-end justify-between">
+<p class="text-2xl font-bold leading-none">High</p>
+<p class="text-success text-xs font-bold">+12%</p>
+</div>
+<div class="w-full h-1 bg-gray-800 mt-2 rounded-full overflow-hidden">
+<div class="bg-danger h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center: Strike Analysis (Resume) -->
+<section class="flex-1 relative flex flex-col bg-black/40 p-10 overflow-hidden">
+<div class="absolute top-4 left-10 flex items-center gap-4">
+<h1 class="text-2xl font-black uppercase tracking-tighter">Strike Analysis: <span class="text-primary italic">V01_Resume.pdf</span></h1>
+<span class="px-2 py-1 bg-primary/20 border border-primary/40 rounded text-[10px] font-black uppercase tracking-widest text-primary">Live Scan Active</span>
+</div>
+<!-- Resume Viewer -->
+<div class="flex-1 bg-white mx-auto w-full max-w-3xl shadow-[0_0_50px_rgba(154,35,246,0.15)] rounded-t-sm p-12 text-gray-800 relative overflow-y-auto no-scrollbar">
+<div class="scan-line"></div>
+<header class="border-b-2 border-gray-100 pb-6 mb-8">
+<h2 class="text-3xl font-bold uppercase tracking-tight text-gray-900">Alex J. Hunter</h2>
+<p class="text-sm text-gray-500 font-medium">Full Stack Engineer | Cyber-Security Specialist</p>
+</header>
+<section class="mb-8">
+<h3 class="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-4 border-b border-gray-100">Professional Summary</h3>
+<p class="text-sm leading-relaxed text-gray-700">
+                        Experienced software developer with a <span class="resume-heatmap-soft">demonstrated history</span> of working in the information technology and services industry. <span class="resume-heatmap-soft">Skilled in</span> Python, React, and Team Management. Strong engineering professional with a Master's degree.
+                    </p>
+</section>
+<section class="mb-8">
+<h3 class="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-4 border-b border-gray-100">Experience</h3>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-bold text-gray-900">Lead Systems Architect</h4>
+<span class="text-xs font-bold text-gray-500 uppercase">2021 — Present</span>
+</div>
+<p class="text-xs font-bold text-primary mb-2">OmniCorp Defense</p>
+<ul class="text-sm text-gray-700 space-y-2 list-disc pl-4">
+<li><span class="resume-heatmap-lethal">Optimized backend microservices architecture</span> increasing deployment speed by 45%.</li>
+<li><span class="resume-heatmap-soft">Helped the team</span> during the migration to AWS Cloud services.</li>
+<li><span class="resume-heatmap-lethal">Engineered an automated strike-detection system</span> used by 50+ enterprise clients.</li>
+<li>Responsible for maintaining code quality and <span class="resume-heatmap-soft">attending weekly meetings</span>.</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- More Resume Content (Cut for visual brevity) -->
+<div class="opacity-30">
+<section>
+<h3 class="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-4 border-b border-gray-100">Skills</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-gray-100 text-[10px] font-bold">AWS</span>
+<span class="px-2 py-1 bg-gray-100 text-[10px] font-bold">TERRAFORM</span>
+<span class="px-2 py-1 bg-gray-100 text-[10px] font-bold">PYTHON</span>
+</div>
+</section>
+</div>
+</div>
+</section>
+<!-- Right Sidebar: Hydra's Recommendations -->
+<aside class="w-96 border-l border-[#382249] bg-background-dark/50 flex flex-col p-6 overflow-y-auto">
+<h3 class="text-xs font-black uppercase tracking-[0.2em] text-primary mb-4 flex items-center justify-between">
+                Hydra's Recommendations
+                <span class="material-symbols-outlined text-lg">radar</span>
+</h3>
+<div class="flex flex-col gap-4">
+<!-- Card 1 -->
+<div class="glass rounded-xl p-4 border-l-4 border-primary hover:bg-primary/5 transition-all cursor-default">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-lg">target</span>
+<span class="text-[10px] font-black uppercase text-[#b18fcc]">Target: Summary</span>
+</div>
+<p class="text-sm italic font-medium">"A hiring manager will fall asleep reading this. Inject some <span class="text-primary font-bold">lethality</span>. Replace 'Experienced' with 'Battle-tested'."</p>
+</div>
+<!-- Card 2 -->
+<div class="glass rounded-xl p-4 border-l-4 border-danger hover:bg-danger/5 transition-all cursor-default">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-danger text-lg">cancel</span>
+<span class="text-[10px] font-black uppercase text-[#b18fcc]">Target: Experience Bullet #2</span>
+</div>
+<p class="text-sm italic font-medium">"This bullet point is <span class="text-danger font-bold uppercase tracking-tighter">soft</span>. 'Helped the team' is for interns. Harden it with data: how did the migration impact the bottom line?"</p>
+</div>
+<!-- Card 3 -->
+<div class="glass rounded-xl p-4 border-l-4 border-primary hover:bg-primary/5 transition-all cursor-default">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-lg">bolt</span>
+<span class="text-[10px] font-black uppercase text-[#b18fcc]">Target: Experience Bullet #4</span>
+</div>
+<p class="text-sm italic font-medium">"Eliminate passive voice. 'Responsible for maintaining' is filler. <span class="text-primary font-bold">Weaponize</span> it: 'Enforced rigorous code-quality protocols'."</p>
+</div>
+<!-- Card 4 -->
+<div class="bg-[#160b1e]/30 border border-dashed border-[#503069] rounded-xl p-4 opacity-60">
+<p class="text-[10px] uppercase font-bold text-center tracking-widest text-[#b18fcc]">Awaiting Further Analysis...</p>
+</div>
+</div>
+</aside>
+</main>
+<!-- Bottom Action Bar -->
+<footer class="h-20 bg-background-dark border-t border-[#382249] px-10 flex items-center justify-between z-50">
+<div class="flex items-center gap-8">
+<div class="flex flex-col">
+<span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#b18fcc] mb-1">Aggression Level</span>
+<div class="flex bg-[#160b1e] rounded-lg p-1 border border-[#382249]">
+<button class="px-4 py-1 text-[10px] font-black uppercase tracking-widest rounded-md text-[#b18fcc] hover:text-white">Passive</button>
+<button class="px-4 py-1 text-[10px] font-black uppercase tracking-widest rounded-md bg-[#382249] text-white">Standard</button>
+<button class="px-4 py-1 text-[10px] font-black uppercase tracking-widest rounded-md text-primary bg-primary/10 border border-primary/40">Lethal</button>
+</div>
+</div>
+<div class="h-10 w-[1px] bg-[#382249]"></div>
+<a class="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[#b18fcc] hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg">construction</span>
+                Refine Weapons
+            </a>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-black uppercase tracking-[0.2em] text-success">Optimization Ready</span>
+<span class="text-xs font-medium text-[#b18fcc] italic">+22% Match Potential</span>
+</div>
+<button class="px-10 py-3 bg-gradient-to-r from-primary to-[#6d18af] rounded-lg text-sm font-black uppercase tracking-[0.2em] text-white shadow-[0_0_20px_rgba(154,35,246,0.4)] hover:shadow-[0_0_30px_rgba(154,35,246,0.6)] transition-all transform hover:-translate-y-1 flex items-center gap-3">
+                Optimize Strike
+                <span class="material-symbols-outlined text-lg">rocket_launch</span>
+</button>
+</div>
+</footer>
+</body></html>

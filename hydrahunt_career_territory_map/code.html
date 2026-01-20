@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HydraHunt Career Territory Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b154f8",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0a050d",
+                        "surface-dark": "#1a1022",
+                        "accent-cyan": "#00f2ff",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .grid-overlay {
+            background-image: linear-gradient(#1a1022 1px, transparent 1px), linear-gradient(90deg, #1a1022 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .glow-purple {
+            box-shadow: 0 0 15px rgba(177, 84, 248, 0.4);
+        }
+        .glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+        .node-line {
+            background: linear-gradient(90deg, #b154f8 0%, #00f2ff 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen overflow-hidden flex flex-col font-display">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-white/10 px-10 py-3 bg-background-light dark:bg-background-dark/80 backdrop-blur-md z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight uppercase">HydraHunt</h2>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Current Domain</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium" href="#">Adjacent Territories</a>
+<a class="text-slate-400 hover:text-white transition-colors text-sm font-medium" href="#">Expansion History</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-dark border border-white/10 text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-dark border border-white/10 text-slate-400 hover:text-white">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-white/10">
+<div class="text-right">
+<p class="text-xs text-slate-400">Agent Status</p>
+<p class="text-sm font-bold text-white">X_OPERATIVE_42</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/50" data-alt="Cyberpunk avatar of a high-tech operative" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCRziJ9bVG2u4ik9KRySf_mf8_Rz7hOGeLqRMbRxNh8nmauJ-DfO8Se1Y3pnybdn-UTa44JjTi-5W0sRP9r28pp9FUxlPe2vdl9FzW4gRbV4PdP095-uq5vyfvKFuDezSHAJyDTOTAwfInz-sUh9Ap0CQajfHEnmPIR1Y2na-mtFI0mRrXTh9FW4M-rS1DRR7xxjR2QH05JnnySveOR0uVnviygqAvI08HyQ9dmVr-a9A2-9tJqh1ewy_FHVlZC_3x5IHgjIoGidgQ");'></div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden relative grid-overlay">
+<!-- Left Sidebar: Mission Objectives -->
+<aside class="w-80 border-r border-white/10 bg-background-dark/60 backdrop-blur-xl p-6 flex flex-col gap-6 z-20">
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-primary uppercase text-xs font-bold tracking-[0.2em]">
+<span class="material-symbols-outlined text-sm">target</span>
+                    Mission Objectives
+                </div>
+<h2 class="text-2xl font-bold text-white">Claim Territory</h2>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-xl bg-surface-dark/50 border border-white/5 space-y-3">
+<p class="text-xs text-slate-400 uppercase tracking-widest">Target Role</p>
+<div class="text-lg font-bold text-accent-cyan">Cybersecurity Analyst</div>
+<div class="flex items-center gap-2">
+<span class="text-xs bg-accent-cyan/10 text-accent-cyan px-2 py-1 rounded">Tier 1 Strategy</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-dark/50 border border-white/5 space-y-3">
+<p class="text-xs text-slate-400 uppercase tracking-widest">Territory Value</p>
+<div class="text-3xl font-bold text-white tabular-nums">$124,500<span class="text-sm text-green-400 ml-2 font-normal">+32%</span></div>
+<p class="text-[10px] text-slate-500 uppercase">Avg. Annual Comp in Target Region</p>
+</div>
+<div class="p-4 rounded-xl bg-surface-dark/50 border border-white/5 space-y-3">
+<p class="text-xs text-slate-400 uppercase tracking-widest">Difficulty Rating</p>
+<div class="flex gap-1 text-primary">
+<span class="material-symbols-outlined fill-1">bolt</span>
+<span class="material-symbols-outlined fill-1">bolt</span>
+<span class="material-symbols-outlined fill-1">bolt</span>
+<span class="material-symbols-outlined">bolt</span>
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<p class="text-xs text-slate-400 italic">"High transition complexity detected."</p>
+</div>
+</div>
+<div class="mt-auto">
+<div class="p-4 rounded-xl bg-primary/10 border border-primary/30">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-sm">info</span>
+<span class="text-xs font-bold uppercase tracking-wider">Tactical Advice</span>
+</div>
+<p class="text-sm text-slate-300 leading-relaxed">Your "Risk Management" core node provides a 40% bridge efficiency to Cybersecurity.</p>
+</div>
+</div>
+</aside>
+<!-- Main Center Content: Territory Map -->
+<main class="flex-1 relative flex flex-col items-center justify-center p-8">
+<!-- Map Controls -->
+<div class="absolute top-8 left-8 flex flex-col gap-2 z-30">
+<div class="flex gap-2 mb-4">
+<div class="px-3 py-1.5 rounded-full bg-surface-dark border border-white/10 text-xs text-slate-300 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        Current: Accounting
+                    </div>
+<div class="px-3 py-1.5 rounded-full bg-surface-dark border border-white/10 text-xs text-slate-300 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-accent-cyan"></span>
+                        Target: Cybersecurity
+                    </div>
+</div>
+</div>
+<div class="absolute top-8 right-8 z-30">
+<div class="flex flex-col gap-1 bg-surface-dark rounded-xl border border-white/10 p-1 shadow-2xl">
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined">add</span></button>
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined">remove</span></button>
+<div class="h-px bg-white/10 mx-2 my-1"></div>
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined">my_location</span></button>
+</div>
+</div>
+<!-- Breadcrumbs -->
+<div class="absolute top-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2 bg-surface-dark/80 backdrop-blur rounded-full border border-white/10 text-xs font-medium">
+<span class="text-slate-500">Global Map</span>
+<span class="material-symbols-outlined text-sm text-slate-600">chevron_right</span>
+<span class="text-slate-500">Professional Path</span>
+<span class="material-symbols-outlined text-sm text-slate-600">chevron_right</span>
+<span class="text-primary font-bold">Territory Transition</span>
+</div>
+<!-- Visualization Canvas -->
+<div class="relative w-full h-full flex items-center justify-center overflow-visible">
+<!-- Nodal Map Visualization (Simulated) -->
+<div class="relative w-[600px] h-[400px]">
+<!-- Connections -->
+<svg class="absolute inset-0 w-full h-full" style="filter: drop-shadow(0 0 5px rgba(177, 84, 248, 0.2));">
+<line stroke="rgba(177, 84, 248, 0.4)" stroke-dasharray="4" stroke-width="2" x1="150" x2="300" y1="200" y2="100"></line>
+<line stroke="rgba(177, 84, 248, 0.4)" stroke-dasharray="4" stroke-width="2" x1="150" x2="300" y1="200" y2="300"></line>
+<line stroke="#b154f8" stroke-width="3" x1="300" x2="500" y1="100" y2="150"></line>
+<line stroke="#00f2ff" stroke-dasharray="8" stroke-width="3" x1="300" x2="500" y1="300" y2="250"></line>
+<line stroke="#00f2ff" stroke-width="2" x1="500" x2="500" y1="150" y2="250"></line>
+</svg>
+<!-- Current Domain Node -->
+<div class="absolute top-1/2 left-0 -translate-y-1/2 flex flex-col items-center group">
+<div class="size-20 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center glow-purple relative">
+<span class="material-symbols-outlined text-primary text-3xl">account_balance</span>
+<div class="absolute -top-2 -right-2 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded">HQ</div>
+</div>
+<p class="mt-3 text-sm font-bold text-white uppercase tracking-tighter">Accounting Core</p>
+</div>
+<!-- Skills Nodes -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="size-16 rounded-full bg-surface-dark border border-white/20 flex items-center justify-center group hover:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">fact_check</span>
+</div>
+<p class="mt-2 text-xs font-medium text-slate-400">Risk Management</p>
+</div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="size-16 rounded-full bg-surface-dark border border-white/20 flex items-center justify-center group hover:border-accent-cyan transition-all cursor-pointer">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-accent-cyan">security</span>
+</div>
+<p class="mt-2 text-xs font-medium text-slate-400">Data Integrity</p>
+</div>
+<!-- Target Node -->
+<div class="absolute top-1/2 right-0 -translate-y-1/2 flex flex-col items-center group">
+<div class="size-24 rounded-full bg-accent-cyan/10 border-2 border-dashed border-accent-cyan flex items-center justify-center glow-cyan relative animate-pulse">
+<span class="material-symbols-outlined text-accent-cyan text-4xl">shield</span>
+<div class="absolute -bottom-2 bg-accent-cyan text-black text-[10px] font-black px-2 py-0.5 rounded uppercase">Objective</div>
+</div>
+<p class="mt-4 text-sm font-black text-accent-cyan uppercase tracking-wider">Cybersecurity Territory</p>
+</div>
+</div>
+<!-- Background map image -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" data-location="San Francisco" style="https://lh3.googleusercontent.com/aida-public/AB6AXuChqIfjlan1fLQzqChRsW7NO1fdbmsB0Sy-x3T6h6vsLs2YwuE9owFdB2Aq08Qg8_X8jxn30MTZed7V6mVoZfVbrMpissPU8IqZWDJbKlKsaCK_Chg3srsfENJp6htXKCvn_JgbOS3bzpFO6YBtAWMDMQyIbmizyOKQ4ynUEiTmb5P5qYqlk12cFe1VPyIerO28yHq-WLtYm4toZ8kNa1LYvdckrmKA6Y5AFUH0DCIx6VYa1_pRZz-lhpsZvu53sw7jsLSJJwAIQo0">
+<img alt="Subtle dark map outline of a tech city" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWSm1bs0oVx7HMv6aMWncAa1ctxHD1c5rajPHKhFjW5JadaXtWz6qTS22Mt7YAeTE8LHkVQiHdrk4Jv1kshXC7QGnd2_SkbB5PiRzZIlp7dfJw6sSdx9v2u7pqSC8x8lP9RyM3XA3JaLbpdrytjtewXRqIMjjic-xfVuU_rsge6pcnK5Mt1Da1QOqypmEL6CIpZLnmZQs0mHrAuzLf_4zIxLuQ6ue9cbi-M1r1iv5XuTq6nYUIAYV-t5P_3CJJdthd-FW-jMyf3Ko"/>
+</div>
+</div>
+</main>
+<!-- Right Sidebar: Intel Gap -->
+<aside class="w-80 border-l border-white/10 bg-background-dark/60 backdrop-blur-xl p-6 flex flex-col gap-6 z-20">
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-accent-cyan uppercase text-xs font-bold tracking-[0.2em]">
+<span class="material-symbols-outlined text-sm">analytics</span>
+                    Intel Gap Analysis
+                </div>
+<h2 class="text-2xl font-bold text-white">Missing Assets</h2>
+</div>
+<div class="flex flex-col gap-4 overflow-y-auto pr-2">
+<!-- Skill Card -->
+<div class="p-4 rounded-xl bg-surface-dark/40 border border-white/10 hover:border-accent-cyan/50 transition-colors group">
+<div class="flex justify-between items-start mb-3">
+<div class="space-y-1">
+<h4 class="text-sm font-bold text-white uppercase tracking-tight">Threat Assessment</h4>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Technical Domain</p>
+</div>
+<span class="material-symbols-outlined text-accent-cyan text-xl">warning</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden mb-4">
+<div class="bg-accent-cyan h-full w-[15%]"></div>
+</div>
+<button class="w-full py-2 bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-accent-cyan hover:text-black transition-all">
+                        Deploy Asset Training
+                    </button>
+</div>
+<!-- Skill Card -->
+<div class="p-4 rounded-xl bg-surface-dark/40 border border-white/10 hover:border-accent-cyan/50 transition-colors group">
+<div class="flex justify-between items-start mb-3">
+<div class="space-y-1">
+<h4 class="text-sm font-bold text-white uppercase tracking-tight">CompTIA Security+</h4>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Certification Requirement</p>
+</div>
+<span class="material-symbols-outlined text-slate-600 text-xl">lock_open</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden mb-4">
+<div class="bg-accent-cyan h-full w-[0%]"></div>
+</div>
+<button class="w-full py-2 bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-accent-cyan hover:text-black transition-all">
+                        Secure Certification
+                    </button>
+</div>
+<!-- Skill Card -->
+<div class="p-4 rounded-xl bg-surface-dark/40 border border-white/10 hover:border-primary/50 transition-colors group">
+<div class="flex justify-between items-start mb-3">
+<div class="space-y-1">
+<h4 class="text-sm font-bold text-white uppercase tracking-tight">Incident Response</h4>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Operational Protocol</p>
+</div>
+<span class="material-symbols-outlined text-primary text-xl">crisis_alert</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden mb-4">
+<div class="bg-primary h-full w-[45%] shadow-[0_0_8px_rgba(177,84,248,0.5)]"></div>
+</div>
+<button class="w-full py-2 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-primary hover:text-white transition-all">
+                        Acquire Skill
+                    </button>
+</div>
+</div>
+<div class="mt-auto border-t border-white/10 pt-4">
+<div class="flex justify-between items-center text-xs mb-2">
+<span class="text-slate-400">Territory Readiness</span>
+<span class="text-accent-cyan font-bold">24%</span>
+</div>
+<div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-primary to-accent-cyan h-full w-[24%]"></div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Bottom Panel: Strike Roadmap -->
+<footer class="h-28 bg-surface-dark border-t border-white/10 px-10 flex items-center relative z-30">
+<div class="flex-shrink-0 mr-12">
+<h3 class="text-xs font-bold uppercase tracking-[0.3em] text-slate-500 mb-1">Mission Timeline</h3>
+<p class="text-sm font-bold text-white">Strike Roadmap v4.1</p>
+</div>
+<div class="flex flex-1 items-center gap-4">
+<!-- Phase 1 -->
+<div class="flex-1 relative">
+<div class="flex items-center gap-3 mb-2">
+<div class="size-6 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-white shadow-[0_0_10px_rgba(177,84,248,0.8)]">01</div>
+<span class="text-xs font-bold text-white uppercase tracking-widest">Skill Acquisition</span>
+</div>
+<div class="h-2 w-full bg-primary/30 rounded-full overflow-hidden relative">
+<div class="absolute inset-0 bg-primary w-[60%]"></div>
+</div>
+<div class="mt-2 text-[10px] text-primary font-bold animate-pulse">IN PROGRESS...</div>
+</div>
+<!-- Connector -->
+<div class="pt-8">
+<span class="material-symbols-outlined text-slate-700">arrow_forward_ios</span>
+</div>
+<!-- Phase 2 -->
+<div class="flex-1 opacity-50">
+<div class="flex items-center gap-3 mb-2">
+<div class="size-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-400">02</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Resume Re-Forging</span>
+</div>
+<div class="h-2 w-full bg-slate-800 rounded-full"></div>
+<div class="mt-2 text-[10px] text-slate-600 uppercase">Status: Locked</div>
+</div>
+<!-- Connector -->
+<div class="pt-8">
+<span class="material-symbols-outlined text-slate-800">arrow_forward_ios</span>
+</div>
+<!-- Phase 3 -->
+<div class="flex-1 opacity-50">
+<div class="flex items-center gap-3 mb-2">
+<div class="size-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-400">03</div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Initial Scouting</span>
+</div>
+<div class="h-2 w-full bg-slate-800 rounded-full"></div>
+<div class="mt-2 text-[10px] text-slate-600 uppercase">Status: Locked</div>
+</div>
+<!-- Connector -->
+<div class="pt-8">
+<span class="material-symbols-outlined text-slate-800">arrow_forward_ios</span>
+</div>
+<!-- Phase 4 -->
+<div class="flex-1 opacity-50">
+<div class="flex items-center gap-3 mb-2">
+<div class="size-6 rounded-full bg-accent-cyan/20 border border-accent-cyan/50 flex items-center justify-center text-[10px] font-bold text-accent-cyan">04</div>
+<span class="text-xs font-bold text-accent-cyan uppercase tracking-widest">Full-Scale Strike</span>
+</div>
+<div class="h-2 w-full bg-accent-cyan/10 rounded-full border border-accent-cyan/20"></div>
+<div class="mt-2 text-[10px] text-accent-cyan/40 uppercase">Objective Region</div>
+</div>
+</div>
+<div class="ml-12">
+<button class="px-8 py-3 bg-primary text-white font-bold uppercase tracking-widest text-xs rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(177,84,248,0.4)]">
+                Launch Deployment
+            </button>
+</div>
+</footer>
+</body></html>
